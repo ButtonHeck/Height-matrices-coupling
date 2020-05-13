@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/grid/fGrid.glsl</file>
+        <file>Shaders/grid/vGrid.glsl</file>
+        <file>Shaders/coordinateSystem/fCS.glsl</file>
+        <file>Shaders/coordinateSystem/gCS.glsl</file>
+        <file>Shaders/coordinateSystem/vCS.glsl</file>
+    </qresource>
+</RCC>
