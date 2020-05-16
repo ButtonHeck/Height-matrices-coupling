@@ -92,12 +92,12 @@ void AppWindow::on_pushButtonMasterMat_clicked()
   //update 3D representation
   ui->OGLWidgetMasterMat->makeCurrent();
   ui->OGLWidgetMasterMat->updateMatrixData(masterMatrix, side);
+  ui->OGLWidgetMasterMat->update();
 
   //update profile view
   ui->OGLWidgetProfileView->makeCurrent();
-  ui->OGLWidgetProfileView->updateProfileBuffer(masterMatrix, side, MATRIX_TYPE::MASTER);
-
-  update();
+  ui->OGLWidgetProfileView->updateProfileBuffer(masterMatrix, side, MATRIX_TYPE::MASTER);  
+  ui->OGLWidgetProfileView->update();
 }
 
 void AppWindow::on_pushButtonTargetMat_clicked()
@@ -112,26 +112,26 @@ void AppWindow::on_pushButtonTargetMat_clicked()
   //update 3D representation
   ui->OGLWidgetTargetMat->makeCurrent();
   ui->OGLWidgetTargetMat->updateMatrixData(targetMatrix, side);
+  ui->OGLWidgetTargetMat->update();
 
   //update profile view
   ui->OGLWidgetProfileView->makeCurrent();
-  ui->OGLWidgetProfileView->updateProfileBuffer(targetMatrix, side, MATRIX_TYPE::TARGET);
-
-  update();
+  ui->OGLWidgetProfileView->updateProfileBuffer(targetMatrix, side, MATRIX_TYPE::TARGET);  
+  ui->OGLWidgetProfileView->update();
 }
 
 void AppWindow::on_checkBoxMasterShowGrid_stateChanged(int stateIsOn)
 {
   ui->OGLWidgetMasterMat->makeCurrent();
   ui->OGLWidgetMasterMat->setShowGrid(stateIsOn);
-  update();
+  ui->OGLWidgetMasterMat->update();
 }
 
 void AppWindow::on_checkBoxTargetShowGrid_stateChanged(int stateIsOn)
 {
   ui->OGLWidgetTargetMat->makeCurrent();
   ui->OGLWidgetTargetMat->setShowGrid(stateIsOn);
-  update();
+  ui->OGLWidgetTargetMat->update();
 }
 
 void AppWindow::on_comboBoxSide_currentIndexChanged(int side)
@@ -139,18 +139,19 @@ void AppWindow::on_comboBoxSide_currentIndexChanged(int side)
   //update 3D represenation for master matrix
   ui->OGLWidgetMasterMat->makeCurrent();
   ui->OGLWidgetMasterMat->updateMatrixData(masterMatrix, side);
+  ui->OGLWidgetMasterMat->update();
 
   //update 3D representation for target matrix
   int targetSide = getSideForTargetMatrix(side);
   ui->OGLWidgetTargetMat->makeCurrent();
   ui->OGLWidgetTargetMat->updateMatrixData(targetMatrix, targetSide);
+  ui->OGLWidgetTargetMat->update();
 
   //update profiles view
   ui->OGLWidgetProfileView->makeCurrent();
   ui->OGLWidgetProfileView->updateProfileBuffer(masterMatrix, side, MATRIX_TYPE::MASTER);
   ui->OGLWidgetProfileView->updateProfileBuffer(targetMatrix, targetSide, MATRIX_TYPE::TARGET);
-
-  update();
+  ui->OGLWidgetProfileView->update();
 }
 
 void AppWindow::on_pushButtonArrange_clicked()
@@ -166,12 +167,12 @@ void AppWindow::on_pushButtonArrange_clicked()
   int targetSide = getSideForTargetMatrix(masterSide);
   ui->OGLWidgetArrangementView->makeCurrent();
   ui->OGLWidgetArrangementView->updateProfilesData(masterMatrix, targetMatrix, masterSide, targetSide);
+  ui->OGLWidgetArrangementView->update();
 
   //update 3D representation of target matrix after arrangement applied
   ui->OGLWidgetTargetMat->makeCurrent();
   ui->OGLWidgetTargetMat->updateMatrixData(targetMatrix, targetSide);
-
-  update();
+  ui->OGLWidgetTargetMat->update();
 }
 
 void AppWindow::arrangeButtonCheckEnabled()

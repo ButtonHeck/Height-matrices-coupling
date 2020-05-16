@@ -17,7 +17,7 @@ void ComparisonSidesWidget::initializeGL()
 {
   functions.initializeOpenGLFunctions();
   functions.glGenBuffers(1, &vbo);
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  functions.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
   QOpenGLShader vGridShader(QOpenGLShader::Vertex);
   vGridShader.compileSourceFile(":/Shaders/grid/vGrid.glsl");
@@ -31,7 +31,7 @@ void ComparisonSidesWidget::initializeGL()
 
 void ComparisonSidesWidget::paintGL()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    functions.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   if (!shader.bind())
     return;
 
@@ -64,7 +64,7 @@ void ComparisonSidesWidget::paintGL()
   //render maser matrix profile
   shader.setUniformValue(shader.uniformLocation("u_color"), QVector4D(1.0f, 0.0f, 0.0f, 1.0f));
   functions.glDrawArrays(GL_LINE_STRIP, 0, masterProfileVerticesCount);
-  glPointSize(4.0f);
+  functions.glEnable(GL_PROGRAM_POINT_SIZE);
   functions.glDrawArrays(GL_POINTS, 0, masterProfileVerticesCount);
 
   //render target matrix profile
@@ -78,7 +78,7 @@ void ComparisonSidesWidget::paintGL()
 
 void ComparisonSidesWidget::resizeGL(int w, int h)
 {
-  glViewport(0, 0, w, h);
+    functions.glViewport(0, 0, w, h);
 }
 
 void ComparisonSidesWidget::updateProfileBuffer(const HeightMatrix &matrix, int side, MATRIX_TYPE type)

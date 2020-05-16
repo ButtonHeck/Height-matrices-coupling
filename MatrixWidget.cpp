@@ -48,7 +48,7 @@ void MatrixWidget::initializeGL()
 
 void MatrixWidget::paintGL()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  functions.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   if(!gridShader.bind())
     return;
 
@@ -69,12 +69,12 @@ void MatrixWidget::paintGL()
 
 void MatrixWidget::resizeGL(int w, int h)
 {
-  glViewport(0, 0, w, h);
+  functions.glViewport(0, 0, w, h);
 }
 
 void MatrixWidget::setClearColor()
 {
-  glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
+  functions.glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
 }
 
 QVector3D MatrixWidget::getEyePosition()

@@ -38,7 +38,7 @@ void ArrangementWidget::initializeGL()
 {
   functions.initializeOpenGLFunctions();
   functions.glGenBuffers(1, &vbo);
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  functions.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
   QOpenGLShader vGridShader(QOpenGLShader::Vertex);
   vGridShader.compileSourceFile(":/Shaders/grid/vGrid.glsl");
@@ -52,7 +52,7 @@ void ArrangementWidget::initializeGL()
 
 void ArrangementWidget::paintGL()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  functions.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   if (!shader.bind())
     return;
 
@@ -78,7 +78,7 @@ void ArrangementWidget::paintGL()
   functions.glBindBuffer(GL_ARRAY_BUFFER, vbo);
   functions.glEnableVertexAttribArray(0);
   functions.glDrawArrays(GL_LINE_STRIP, 0, profileVerticesCount);
-  glPointSize(4.0f);
+  functions.glEnable(GL_PROGRAM_POINT_SIZE);
   functions.glDrawArrays(GL_POINTS, 0, profileVerticesCount);
 
   //render comparison line with arrangement applied
@@ -92,7 +92,7 @@ void ArrangementWidget::paintGL()
 
 void ArrangementWidget::resizeGL(int w, int h)
 {
-  glViewport(0, 0, w, h);
+    functions.glViewport(0, 0, w, h);
 }
 
 void ArrangementWidget::updateSourceProfile(const HeightMatrix& matrix, int side)

@@ -6,6 +6,7 @@
 #include <QOpenGLWidget>
 #include <QMessageBox>
 #include <HeightMatrix.h>
+#include <random>
 
 namespace Ui {
   class AppWindow;
