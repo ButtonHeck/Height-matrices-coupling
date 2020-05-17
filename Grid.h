@@ -12,7 +12,7 @@ class Grid
 public:
   Grid(QOpenGLShaderProgram *shader, QOpenGLFunctions& functions);
   ~Grid();
-  void update(const HeightMatrix &matrix, int side);
+  void update(const HeightMatrix &matrix, SIDE side);
   int getWidth() const;
   int getHeight() const;
   void setShowFlatGrid(bool isShow);
@@ -31,7 +31,7 @@ private:
 
   void updateGridVertices(int matrixPrecision);
   void updateMatrixVertices(const HeightMatrix &matrix);
-  void updateComparisonSideVertices(const HeightMatrix &matrix, int side);
+  void updateComparisonSideVertices(const HeightMatrix &matrix, SIDE side);
   void bufferGridVertex(GridVertex&& gridVertex);
   void bufferMatrixVertex(MatrixVertex&& heightMatrixVertex);
   void bufferComparisonSideVertex(MatrixVertex&& sideVertex);

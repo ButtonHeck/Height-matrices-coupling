@@ -12,7 +12,7 @@ class ComparisonSidesWidget : public QOpenGLWidget
 public:
   ComparisonSidesWidget(QWidget *parent = 0);
   virtual ~ComparisonSidesWidget();
-  void updateProfileBuffer(const HeightMatrix &matrix, int side, MATRIX_TYPE type);
+  void updateProfileBuffer(const HeightMatrix &matrix, SIDE side, MATRIX_TYPE type);
 
 private:
   struct ProfileVertex
@@ -29,7 +29,7 @@ private:
   void bufferToVBO();
 
   void createComparisonLineData(const HeightMatrix &matrix,
-                                int side,
+                                SIDE side,
                                 std::vector<float>& profilesVertices,
                                 GLuint& verticesCount,
                                 int& projectionDistance);

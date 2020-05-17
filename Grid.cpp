@@ -23,7 +23,7 @@ Grid::~Grid()
   functions.glDeleteBuffers(1, &ebo);
 }
 
-void Grid::update(const HeightMatrix &matrix, int side)
+void Grid::update(const HeightMatrix &matrix, SIDE side)
 {
   if (matrix.getWidth() == 0)
     return;
@@ -137,7 +137,7 @@ void Grid::updateMatrixVertices(const HeightMatrix& matrix)
     }
 }
 
-void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, int side)
+void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, SIDE side)
 {
   int halfWidth = width / 2;
   int halfHeight = height / 2;
@@ -145,7 +145,7 @@ void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, int side)
 
   switch (side)
     {
-    case LEFT:
+    case SIDE::LEFT:
       for (HeightMatrix::ConstColumnIterator column = matrix.columnBegin(0); column.isValid(); column++)
         {
           MatrixVertex v{(float)(-halfWidth),
@@ -154,7 +154,7 @@ void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, int side)
           bufferComparisonSideVertex(std::move(v));
         }
       break;
-    case RIGHT:
+    case SIDE::RIGHT:
       for (HeightMatrix::ConstColumnIterator column = matrix.columnBegin(matrix.getWidth() - 1); column.isValid(); column++)
         {
           MatrixVertex v{(float)halfWidth - precision,
@@ -163,7 +163,7 @@ void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, int side)
           bufferComparisonSideVertex(std::move(v));
         }
       break;
-    case TOP:
+    case SIDE::TOP:
       for (HeightMatrix::ConstRowIterator row = matrix.rowBegin(0); row.isValid(); row++)
         {
           MatrixVertex v{row.getCurrentIndex() * precision - halfWidth,
@@ -172,7 +172,7 @@ void Grid::updateComparisonSideVertices(const HeightMatrix &matrix, int side)
           bufferComparisonSideVertex(std::move(v));
         }
       break;
-    case BOTTOM:
+    case SIDE::BOTTOM:
       for (HeightMatrix::ConstRowIterator row = matrix.rowBegin(matrix.getHeight() - 1); row.isValid(); row++)
         {
           MatrixVertex v{row.getCurrentIndex() * precision - halfWidth,

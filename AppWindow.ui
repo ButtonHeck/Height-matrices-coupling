@@ -196,7 +196,7 @@
            </layout>
           </item>
           <item>
-           <widget class="MatrixWidget" name="OGLWidgetMasterMat">
+           <widget class="MatrixWidget" name="OGL_MasterMatWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -216,7 +216,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="TargetMatrixWidget" name="OGLWidgetTargetMat">
+           <widget class="TargetMatrixWidget" name="OGL_TargetMatWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -422,7 +422,7 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="ComparisonSidesWidget" name="OGLWidgetProfileView">
+         <widget class="ComparisonSidesWidget" name="OGL_ProfileViewWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -503,7 +503,7 @@
          </layout>
         </item>
         <item>
-         <widget class="ArrangementWidget" name="OGLWidgetArrangementView">
+         <widget class="ArrangementWidget" name="OGL_ArrangementViewWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

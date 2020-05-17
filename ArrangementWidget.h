@@ -12,19 +12,19 @@ class ArrangementWidget : public QOpenGLWidget
 public:
   ArrangementWidget(QWidget *parent = 0);
   ~ArrangementWidget();
-  void updateProfilesData(const HeightMatrix &masterMatrix, HeightMatrix& targetMatrix, int masterSide, int targetSide);
+  void updateProfilesData(const HeightMatrix &masterMatrix, HeightMatrix& targetMatrix, SIDE masterSide, SIDE targetSide);
 
 private:
   void initializeGL() override;
   void paintGL() override;
   void resizeGL(int w, int h) override;
-  void updateSourceProfile(const HeightMatrix &matrix, int side);
-  void updateArrangedProfile(const HeightMatrix &masterMatrix, HeightMatrix &targetMatrix, int masterSide);
+  void updateSourceProfile(const HeightMatrix &matrix, SIDE side);
+  void updateArrangedProfile(const HeightMatrix &masterMatrix, HeightMatrix &targetMatrix, SIDE masterSide);
   void mergeSourceAndArrangedVertices();
   void bufferToVBO();
   void adjustSourceAndArrangedProfiles();
   void createInterpolants(float value1, float value2, unsigned int steps, size_t x);
-  void updateTargetMatrix(HeightMatrix &matrix, int side);
+  void updateTargetMatrix(HeightMatrix &matrix, SIDE side);
 
   QOpenGLFunctions functions;
   QOpenGLShaderProgram shader;
