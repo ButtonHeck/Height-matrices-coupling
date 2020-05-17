@@ -1,0 +1,4 @@
+1. make one global qopenglfunctions object
+2. paint grid with different shades of gray dependent on a vertex' height value
+3. make non-fixed camera view for target and master matrices
+4. put matrix type parameter inside height matrix class

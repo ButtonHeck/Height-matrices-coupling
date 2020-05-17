@@ -56,3 +56,6 @@ HEADERS += \
 
 RESOURCES += \
     Shaders.qrc
+
+DISTFILES += \
+    todoList.txt

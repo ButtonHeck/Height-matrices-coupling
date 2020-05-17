@@ -1,96 +1,122 @@
 #include "ComparisonSidesWidget.h"
 
-ComparisonSidesWidget::ComparisonSidesWidget(QWidget *parent)
-    :
-      QOpenGLWidget(parent),
-      functions(),
-      projectionHorizontalDistanceMaster(0),
-      projectionHorizontalDistanceTarget(0)
+ComparisonSidesWidget::ComparisonSidesWidget( QWidget * parent )
+    : QOpenGLWidget(parent)
+    , functions()
+    , vboDataValid(false)
+    , projectionHorizontalDistanceMaster(0)
+    , projectionHorizontalDistanceTarget(0)
 {}
 
 ComparisonSidesWidget::~ComparisonSidesWidget()
 {
-    functions.glDeleteBuffers(1, &vbo);
+    functions.glDeleteBuffers( 1, &vbo );
 }
 
+/**
+ * @brief initializes OpenGL function pointers, shader program and some pre-rendering stuff
+ */
 void ComparisonSidesWidget::initializeGL()
 {
+    //initialize OpenGL functions and pre-rendering setup
     functions.initializeOpenGLFunctions();
-    functions.glGenBuffers(1, &vbo);
-    functions.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    functions.glGenBuffers( 1, &vbo );
+    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    functions.glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+    functions.glEnableVertexAttribArray(0);
+    functions.glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    functions.glEnable(GL_PROGRAM_POINT_SIZE);
 
-    QOpenGLShader vGridShader(QOpenGLShader::Vertex);
-    vGridShader.compileSourceFile(":/Shaders/grid/vGrid.glsl");
-    QOpenGLShader fGridShader(QOpenGLShader::Fragment);
-    fGridShader.compileSourceFile(":/Shaders/grid/fGrid.glsl");
-    shader.addShader(&vGridShader);
-    shader.addShader(&fGridShader);
-    if (!shader.link())
-        qWarning("Unable to link grid shader program");
+    //create shaders
+    QOpenGLShader vertexShader( QOpenGLShader::Vertex );
+    vertexShader.compileSourceFile(":/Shaders/grid/vGrid.glsl");
+    QOpenGLShader fragmentShader( QOpenGLShader::Fragment );
+    fragmentShader.compileSourceFile(":/Shaders/grid/fGrid.glsl");
+    //create shader program
+    shaderProgram.addShader( &vertexShader );
+    shaderProgram.addShader( &fragmentShader );
+    if ( !shaderProgram.link() )
+    {
+        qWarning("Unable to link comparison widget program");
+    }
+
+    //initialize view matrix
+    if ( !shaderProgram.bind() )
+    {
+        qWarning( "Error during comparison widget program binding" );
+        return;
+    }
+    QMatrix4x4 viewMatrix;
+    viewMatrix.lookAt( QVector3D( 0.0f, 0.0f, 1.0f ), QVector3D( 0.0f, 0.0f, 0.0f ), QVector3D( 0.0f, 1.0f, 0.0f ) );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_view"), viewMatrix );
 }
 
+/**
+ * @brief draw function
+ */
 void ComparisonSidesWidget::paintGL()
 {
-    functions.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (!shader.bind())
-        return;
-
-    //check whether vbo data is outdated
-    if (!vboDataValid)
+    functions.glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    if ( !shaderProgram.bind() )
     {
-        bufferToVBO();
+        qWarning( "Error during comparison widget program binding" );
+        return;
+    }
+    //check whether vbo data is outdated
+    if ( !vboDataValid )
+    {
+        updateVBO();
         vboDataValid = true;
     }
 
     //update projection matrix
     QMatrix4x4 projectionMatrix;
-    projectionMatrix.ortho(0.0f,
-                           std::max(projectionHorizontalDistanceMaster, projectionHorizontalDistanceTarget),
-                           0.0f,
-                           HeightMatrix::MAX_HEIGHT,
-                           0.1f,
-                           10.0f);
-    shader.setUniformValue(shader.uniformLocation("u_projection"), projectionMatrix);
+    float projectionRightPlane = std::max( projectionHorizontalDistanceMaster, projectionHorizontalDistanceTarget );
+    projectionMatrix.ortho( 0.0f, projectionRightPlane, 0.0f, HeightMatrix::MAX_HEIGHT, 0.1f, 2.0f );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_projection"), projectionMatrix );
 
-    //update view matrix
-    QMatrix4x4 viewMatrix;
-    viewMatrix.lookAt(QVector3D(0.0f, 0.0f, 1.0f), QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f));
-    shader.setUniformValue(shader.uniformLocation("u_view"), viewMatrix);
+    //render maser matrix profile - red line
+    GLsizei numMasterVertices = masterProfileVertices.size() / 2;
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 0.0f, 0.0f, 1.0f ) );
+    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    functions.glDrawArrays( GL_LINE_STRIP, 0, numMasterVertices );
+    functions.glDrawArrays( GL_POINTS, 0, numMasterVertices );
 
-    //prepare vbo
-    functions.glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    functions.glEnableVertexAttribArray(0);
-
-    //render maser matrix profile
-    shader.setUniformValue(shader.uniformLocation("u_color"), QVector4D(1.0f, 0.0f, 0.0f, 1.0f));
-    functions.glDrawArrays(GL_LINE_STRIP, 0, masterProfileVerticesCount);
-    functions.glEnable(GL_PROGRAM_POINT_SIZE);
-    functions.glDrawArrays(GL_POINTS, 0, masterProfileVerticesCount);
-
-    //render target matrix profile
-    shader.setUniformValue(shader.uniformLocation("u_color"), QVector4D(0.0f, 0.0f, 1.0f, 1.0f));
-    functions.glDrawArrays(GL_LINE_STRIP, masterProfileVerticesCount, targetProfileVerticesCount);
-    functions.glDrawArrays(GL_POINTS, masterProfileVerticesCount, targetProfileVerticesCount);
-
-    functions.glDisableVertexAttribArray(0);
-    functions.glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //render target matrix profile - blue line
+    GLsizei numTargetVertices = targetProfileVertices.size() / 2;
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.0f, 0.0f, 1.0f, 1.0f ) );
+    functions.glDrawArrays( GL_LINE_STRIP, numMasterVertices, numTargetVertices );
+    functions.glDrawArrays( GL_POINTS, numMasterVertices, numTargetVertices );
 }
 
-void ComparisonSidesWidget::resizeGL(int w, int h)
+/**
+ * @brief adjusts viewport according to current size of the window
+ * @param w width of the viewport
+ * @param h height of the viewport
+ */
+void ComparisonSidesWidget::resizeGL( int w, int h )
 {
-    functions.glViewport(0, 0, w, h);
+    functions.glViewport( 0, 0, w, h );
 }
 
-void ComparisonSidesWidget::updateProfileBuffer(const HeightMatrix &matrix, SIDE side, MATRIX_TYPE type)
+/**
+ * @brief updates profile buffer dependent on a given matrix
+ * @param MATRIX matrix
+ * @param side side of the given matrix
+ * @param type type of the given matrix
+ */
+void ComparisonSidesWidget::updateProfileBuffer( const HeightMatrix & MATRIX,
+                                                 SIDE side,
+                                                 MATRIX_TYPE type )
 {
-    if (matrix.getWidth() == 0)
+    if ( MATRIX.getWidth() == 0 )
+    {
         return;
-    std::vector<float>& vertices = (type == MATRIX_TYPE::MASTER) ? masterProfileVertices : targetProfileVertices;
+    }
+    std::vector<float> & vertices = (type == MATRIX_TYPE::MASTER) ? masterProfileVertices : targetProfileVertices;
     vertices.clear();
-    GLuint& verticesCount = (type == MATRIX_TYPE::MASTER) ? masterProfileVerticesCount : targetProfileVerticesCount;
-    verticesCount = 0;
-    int& projectionHorizontalDistance = (type == MATRIX_TYPE::MASTER) ? projectionHorizontalDistanceMaster : projectionHorizontalDistanceTarget;
-    createComparisonLineData(matrix, side, vertices, verticesCount, projectionHorizontalDistance);
+    int & projectionHorizontalDistance = (type == MATRIX_TYPE::MASTER) ? projectionHorizontalDistanceMaster : projectionHorizontalDistanceTarget;
+    createComparisonLineData( MATRIX, side, vertices, projectionHorizontalDistance );
 
     //add both master and target profile lines data to one storage used by VBO during rendering
     mergeMasterAndTargetProfilesVertices();
@@ -99,48 +125,68 @@ void ComparisonSidesWidget::updateProfileBuffer(const HeightMatrix &matrix, SIDE
     vboDataValid = false;
 }
 
+/**
+ * @brief merges both master and target profile vertices into one common storage
+ */
 void ComparisonSidesWidget::mergeMasterAndTargetProfilesVertices()
 {
     profilesVertices.clear();
-    profilesVertices.reserve(masterProfileVertices.size() + targetProfileVertices.size());
-    profilesVertices.insert(profilesVertices.end(), masterProfileVertices.begin(), masterProfileVertices.end());
-    profilesVertices.insert(profilesVertices.end(), targetProfileVertices.begin(), targetProfileVertices.end());
+    profilesVertices.reserve( masterProfileVertices.size() + targetProfileVertices.size() );
+    profilesVertices.insert( profilesVertices.end(), masterProfileVertices.begin(), masterProfileVertices.end() );
+    profilesVertices.insert( profilesVertices.end(), targetProfileVertices.begin(), targetProfileVertices.end() );
 }
 
-void ComparisonSidesWidget::bufferToVBO()
+/**
+ * @brief updates vertex buffer with data stored in profiles storage
+ */
+void ComparisonSidesWidget::updateVBO()
 {
-    functions.glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    functions.glBufferData(GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW);
-    functions.glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    functions.glBindBuffer(GL_ARRAY_BUFFER, 0);
+    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    functions.glBufferData( GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW );
+    functions.glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
-void ComparisonSidesWidget::createComparisonLineData(const HeightMatrix& matrix,
-                                                     SIDE side,
-                                                     std::vector<float>& vertices,
-                                                     GLuint& verticesCount,
-                                                     int& projectionDistance)
+/**
+ * @brief stores profile vertices of a given side from a given matrix to a given storage
+ * @param MATRIX matrix
+ * @param side side of the matrix
+ * @param vertices storage to fill
+ * @param projectionDistance distance used in projection matrix dependent on the profile length
+ */
+void ComparisonSidesWidget::createComparisonLineData( const HeightMatrix & MATRIX,
+                                                      SIDE side,
+                                                      std::vector<float> & vertices,
+                                                      int & projectionDistance )
 {
-    float precision = (float)matrix.getPrecision();
-    if (side == SIDE::LEFT || side == SIDE::RIGHT)
+    float precision = (float)MATRIX.getPrecision();
+    if ( side == SIDE::LEFT || side == SIDE::RIGHT )
     {
-        HeightMatrix::ConstColumnIterator column = (side == SIDE::LEFT) ? matrix.columnBegin(0) : matrix.columnBegin(matrix.getWidth() - 1);
-        for (; column.isValid(); column++)
-            bufferProfileVertex(vertices, ProfileVertex{column.getCurrentIndex() * precision, *column}, verticesCount);
-        projectionDistance = matrix.getHeight() * precision;
+        HeightMatrix::ConstColumnIterator column = (side == SIDE::LEFT) ? MATRIX.columnBegin(0) : MATRIX.columnBegin( MATRIX.getWidth() - 1 );
+        for ( ; column.isValid(); column++ )
+        {
+            bufferProfileVertex( vertices, ProfileVertex{ column.getCurrentIndex() * precision, *column } );
+        }
+        projectionDistance = MATRIX.getHeight() * precision;
     }
     else
     {
-        HeightMatrix::ConstRowIterator row = (side == SIDE::TOP) ? matrix.rowBegin(0) : matrix.rowBegin(matrix.getHeight() - 1);
-        for (; row.isValid(); row++)
-            bufferProfileVertex(vertices, ProfileVertex{row.getCurrentIndex() * precision, *row}, verticesCount);
-        projectionDistance = matrix.getWidth() * precision;
+        HeightMatrix::ConstRowIterator row = (side == SIDE::TOP) ? MATRIX.rowBegin(0) : MATRIX.rowBegin( MATRIX.getHeight() - 1 );
+        for ( ; row.isValid(); row++ )
+        {
+            bufferProfileVertex( vertices, ProfileVertex{ row.getCurrentIndex() * precision, *row } );
+        }
+        projectionDistance = MATRIX.getWidth() * precision;
     }
 }
 
-void ComparisonSidesWidget::bufferProfileVertex(std::vector<float>& vertices, ProfileVertex &&vertex, GLuint& verticesCount)
+/**
+ * @brief helper function to buffer vertex into a given storage
+ * @param vertices buffer of vertices
+ * @param vertex a profile line vertex
+ */
+void ComparisonSidesWidget::bufferProfileVertex( std::vector<float> & vertices,
+                                                 ProfileVertex && vertex )
 {
-    vertices.emplace_back(vertex.x);
-    vertices.emplace_back(vertex.y);
-    verticesCount++;
+    vertices.emplace_back( vertex.x );
+    vertices.emplace_back( vertex.y );
 }

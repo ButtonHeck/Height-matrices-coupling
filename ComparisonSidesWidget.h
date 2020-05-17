@@ -1,19 +1,23 @@
-#ifndef COMPARISONSIDESWIDGET_H
-#define COMPARISONSIDESWIDGET_H
+#pragma once
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <vector>
+
 #include "HeightMatrix.h"
 
+/**
+ * @brief View widget of the master and target matrices original profiles for the chosen side
+ */
 class ComparisonSidesWidget : public QOpenGLWidget
 {
 public:
-    ComparisonSidesWidget(QWidget *parent = 0);
+    ComparisonSidesWidget( QWidget * parent = 0 );
     virtual ~ComparisonSidesWidget();
-    void updateProfileBuffer(const HeightMatrix &matrix, SIDE side, MATRIX_TYPE type);
-
+    void updateProfileBuffer( const HeightMatrix & MATRIX,
+                              SIDE side,
+                              MATRIX_TYPE type );
 private:
     struct ProfileVertex
     {
@@ -22,31 +26,25 @@ private:
 
     void initializeGL() override;
     void paintGL() override;
-    void resizeGL(int w, int h) override;
+    void resizeGL( int w, int h ) override;
 
     void mergeMasterAndTargetProfilesVertices();
-    void bufferProfileVertex(std::vector<float> &profilesVertices, ProfileVertex&& vertex, GLuint& verticesCount);
-    void bufferToVBO();
-
-    void createComparisonLineData(const HeightMatrix &matrix,
-                                  SIDE side,
-                                  std::vector<float>& profilesVertices,
-                                  GLuint& verticesCount,
-                                  int& projectionDistance);
-
+    void bufferProfileVertex( std::vector<float> & profilesVertices,
+                              ProfileVertex && vertex);
+    void updateVBO();
+    void createComparisonLineData( const HeightMatrix & MATRIX,
+                                   SIDE side,
+                                   std::vector<float> & profilesVertices,
+                                   int & projectionDistance );
+private:
     QOpenGLFunctions functions;
-    QOpenGLShaderProgram shader;
+    QOpenGLShaderProgram shaderProgram;
     GLuint vbo;
     bool vboDataValid;
     std::vector<float> profilesVertices;
 
     std::vector<float> masterProfileVertices;
-    GLuint masterProfileVerticesCount;
     int projectionHorizontalDistanceMaster;
-
     std::vector<float> targetProfileVertices;
-    GLuint targetProfileVerticesCount;
     int projectionHorizontalDistanceTarget;
 };
-
-#endif // COMPARISONSIDESWIDGET_H
