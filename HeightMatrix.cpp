@@ -32,22 +32,22 @@ double HeightMatrix::getPrecision() const
     return precision;
 }
 
-HeightMatrix::RowIterator HeightMatrix::rowBegin(const int row)
+HeightMatrix::RowIterator HeightMatrix::rowBegin(const size_t row)
 {
     return RowIterator(row, storage);
 }
 
-HeightMatrix::ConstRowIterator HeightMatrix::rowBegin(const int row) const
+HeightMatrix::ConstRowIterator HeightMatrix::rowBegin(const size_t row) const
 {
     return ConstRowIterator(row, storage);
 }
 
-HeightMatrix::ColumnIterator HeightMatrix::columnBegin(const int column)
+HeightMatrix::ColumnIterator HeightMatrix::columnBegin(const size_t column)
 {
     return ColumnIterator(column, storage);
 }
 
-HeightMatrix::ConstColumnIterator HeightMatrix::columnBegin(const int column) const
+HeightMatrix::ConstColumnIterator HeightMatrix::columnBegin(const size_t column) const
 {
     return ConstColumnIterator(column, storage);
 }

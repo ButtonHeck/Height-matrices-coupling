@@ -167,11 +167,11 @@ void AppWindow::on_pushButtonArrange_clicked()
  * @param side side to arrange
  */
 void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
-                                  const HeightMatrix & matrix,
+                                  const HeightMatrix & MATRIX,
                                   SIDE side )
 {
     matrixWidget->makeCurrent();
-    matrixWidget->updateMatrixData( matrix, side );
+    matrixWidget->updateMatrixData( MATRIX, side );
     matrixWidget->update();
 }
 
@@ -181,12 +181,12 @@ void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
  * @param side side of the matrix
  * @param matrixType type of the matrix
  */
-void AppWindow::updateProfileView( const HeightMatrix & matrix,
+void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
                                    SIDE side,
                                    MATRIX_TYPE matrixType )
 {
     ui->OGL_ProfileViewWidget->makeCurrent();
-    ui->OGL_ProfileViewWidget->updateProfileBuffer( matrix, side, matrixType );
+    ui->OGL_ProfileViewWidget->updateProfileBuffer( MATRIX, side, matrixType );
     ui->OGL_ProfileViewWidget->update();
 }
 

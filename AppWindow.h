@@ -36,9 +36,9 @@ private:
     void fillMatrix( HeightMatrix & matrix );
     SIDE getSideForTargetMatrix( SIDE side );
     void updateMatrixView( MatrixWidget * matrixWidget,
-                           const HeightMatrix & matrix,
+                           const HeightMatrix & MATRIX,
                            SIDE side );
-    void updateProfileView( const HeightMatrix & matrix,
+    void updateProfileView( const HeightMatrix & MATRIX,
                             SIDE side,
                             MATRIX_TYPE matrixType );
 

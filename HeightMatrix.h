@@ -79,10 +79,10 @@ public:
     };
 
     HeightMatrix(std::size_t width, std::size_t height, double precision);
-    RowIterator rowBegin(const int row);
-    ConstRowIterator rowBegin(const int row) const;
-    ColumnIterator columnBegin(const int column);
-    ConstColumnIterator columnBegin(const int column) const;
+    RowIterator rowBegin(const size_t row);
+    ConstRowIterator rowBegin(const size_t row) const;
+    ColumnIterator columnBegin(const size_t column);
+    ConstColumnIterator columnBegin(const size_t column) const;
     std::size_t getWidth() const;
     std::size_t getHeight() const;
     double getPrecision() const;
