@@ -1,20 +1,23 @@
-#ifndef COORDINATESYSTEM_H
-#define COORDINATESYSTEM_H
+#pragma once
 
 #include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
 
+class QOpenGLShaderProgram;
+
+/**
+ * @brief Coordinate system representation class
+ */
 class CoordinateSystem
 {
 public:
-  CoordinateSystem(QOpenGLShaderProgram *shader, QOpenGLFunctions &functions);
-  ~CoordinateSystem();
-  void draw(QMatrix4x4& projectionMatrix, QMatrix4x4& viewMatrix);
+    CoordinateSystem( QOpenGLShaderProgram * shaderProgram,
+                      QOpenGLFunctions & functions );
+    ~CoordinateSystem();
+    void draw( const QMatrix4x4 & PROJECTION_MATRIX,
+               const QMatrix4x4 & VIEW_MATRIX );
 
 private:
-  QOpenGLShaderProgram *shader;
-  QOpenGLFunctions &functions;
-  GLuint vbo;
+    QOpenGLShaderProgram * shaderProgram;
+    QOpenGLFunctions & functions;
+    GLuint vbo;
 };
-
-#endif // COORDINATESYSTEM_H
