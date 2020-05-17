@@ -2,7 +2,7 @@
 
 SIDE HeightMatrix::sideFrom( int side )
 {
-    return side < 3 ? SIDE(side) : SIDE::LEFT;
+    return side <= 3 ? SIDE(side) : SIDE::LEFT;
 }
 
 HeightMatrix::HeightMatrix(std::size_t width, std::size_t height, double precision)
