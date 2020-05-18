@@ -2,6 +2,7 @@
 #define MATRIXWIDGET_H
 
 #include <QOpenGLWidget>
+#include <QOpenGLShaderProgram>
 #include <memory>
 #include <QMatrix4x4>
 #include "HeightMatrix.h"
