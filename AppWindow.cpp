@@ -28,8 +28,8 @@ AppWindow::AppWindow( QWidget * parent )
     connect( ui->comboBoxMasterMatPrec, SIGNAL( currentIndexChanged(int) ), SLOT( arrangeButtonCheckEnabled() ) );
     connect( ui->comboBoxTargetMatPrec, SIGNAL( currentIndexChanged(int) ), SLOT( arrangeButtonCheckEnabled() ) );
     //grid visibility
-    connect( ui->checkBoxMasterShowGrid, SIGNAL( toggled(bool) ), ui->OGL_MasterMatWidget, SLOT( setShowGrid(bool) ) );
-    connect( ui->checkBoxTargetShowGrid, SIGNAL( toggled(bool) ), ui->OGL_TargetMatWidget, SLOT( setShowGrid(bool) ) );
+    connect( ui->checkBoxMasterShowGrid, SIGNAL( toggled(bool) ), ui->OGL_MasterMatWidget, SLOT( setShowFlatGrid(bool) ) );
+    connect( ui->checkBoxTargetShowGrid, SIGNAL( toggled(bool) ), ui->OGL_TargetMatWidget, SLOT( setShowFlatGrid(bool) ) );
 }
 
 AppWindow::~AppWindow()
