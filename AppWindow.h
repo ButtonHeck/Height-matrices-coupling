@@ -34,12 +34,12 @@ private:
                                           QComboBox * heightComboBox,
                                           QComboBox * precisionComboBox );
     void fillMatrix( HeightMatrix & matrix );
-    SIDE getSideForTargetMatrix( SIDE side );
+    COMPARISON_SIDE getSideForTargetMatrix( COMPARISON_SIDE side );
     void updateMatrixView( MatrixWidget * matrixWidget,
                            const HeightMatrix & MATRIX,
-                           SIDE side );
+                           COMPARISON_SIDE side );
     void updateProfileView( const HeightMatrix & MATRIX,
-                            SIDE side,
+                            COMPARISON_SIDE side,
                             MATRIX_TYPE matrixType );
 
 private:

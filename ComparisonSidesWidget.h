@@ -16,7 +16,7 @@ public:
     ComparisonSidesWidget( QWidget * parent = 0 );
     virtual ~ComparisonSidesWidget();
     void updateProfileBuffer( const HeightMatrix & MATRIX,
-                              SIDE side,
+                              COMPARISON_SIDE side,
                               MATRIX_TYPE type );
 private:
     struct ProfileVertex
@@ -33,7 +33,7 @@ private:
                               ProfileVertex && vertex);
     void updateVBO();
     void createComparisonLineData( const HeightMatrix & MATRIX,
-                                   SIDE side,
+                                   COMPARISON_SIDE side,
                                    std::vector<float> & profilesVertices,
                                    int & projectionDistance );
 private:

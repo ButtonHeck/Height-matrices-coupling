@@ -6,7 +6,7 @@ MatrixWidget::MatrixWidget(QWidget *parent)
       functions()
 {}
 
-void MatrixWidget::updateMatrixData(const HeightMatrix &matrix, SIDE side)
+void MatrixWidget::updateMatrixData(const HeightMatrix &matrix, COMPARISON_SIDE side)
 {
     grid->update(matrix, side);
 }

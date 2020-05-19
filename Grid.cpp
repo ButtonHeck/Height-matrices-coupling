@@ -39,7 +39,7 @@ Grid::~Grid()
  * @param side side of the matrix
  */
 void Grid::update( const HeightMatrix & MATRIX,
-                   SIDE side )
+                   COMPARISON_SIDE side )
 {
     if ( MATRIX.getWidth() == 0 )
     {
@@ -168,7 +168,7 @@ void Grid::updateMatrixGridVertices( const HeightMatrix & MATRIX )
  * @param side side of the matrix
  */
 void Grid::updateComparisonSideVertices( const HeightMatrix & MATRIX,
-                                         SIDE side )
+                                         COMPARISON_SIDE side )
 {
     int halfWidth = width / 2;
     int halfHeight = height / 2;
@@ -182,7 +182,7 @@ void Grid::updateComparisonSideVertices( const HeightMatrix & MATRIX,
 
     switch (side)
     {
-    case SIDE::LEFT:
+    case COMPARISON_SIDE::LEFT:
         for ( HeightMatrix::ConstColumnIterator column = MATRIX.columnBegin(0); column.isValid(); column++ )
         {
             MatrixGridVertex v{ (float)(-halfWidth),
@@ -191,7 +191,7 @@ void Grid::updateComparisonSideVertices( const HeightMatrix & MATRIX,
             bufferComparisonSideVertex( std::move(v) );
         }
         break;
-    case SIDE::RIGHT:
+    case COMPARISON_SIDE::RIGHT:
         for ( HeightMatrix::ConstColumnIterator column = MATRIX.columnBegin( MATRIX.getWidth() - 1 ); column.isValid(); column++ )
         {
             MatrixGridVertex v{ (float)halfWidth - precision,
@@ -200,7 +200,7 @@ void Grid::updateComparisonSideVertices( const HeightMatrix & MATRIX,
             bufferComparisonSideVertex( std::move(v) );
         }
         break;
-    case SIDE::TOP:
+    case COMPARISON_SIDE::TOP:
         for ( HeightMatrix::ConstRowIterator row = MATRIX.rowBegin(0); row.isValid(); row++ )
         {
             MatrixGridVertex v{ row.getCurrentIndex() * precision - halfWidth,
@@ -209,7 +209,7 @@ void Grid::updateComparisonSideVertices( const HeightMatrix & MATRIX,
             bufferComparisonSideVertex( std::move(v) );
         }
         break;
-    case SIDE::BOTTOM:
+    case COMPARISON_SIDE::BOTTOM:
         for ( HeightMatrix::ConstRowIterator row = MATRIX.rowBegin( MATRIX.getHeight() - 1 ); row.isValid(); row++ )
         {
             MatrixGridVertex v{ row.getCurrentIndex() * precision - halfWidth,

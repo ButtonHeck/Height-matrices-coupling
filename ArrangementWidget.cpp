@@ -21,8 +21,8 @@ ArrangementWidget::~ArrangementWidget()
  */
 void ArrangementWidget::updateProfilesData( const HeightMatrix & MASTER_MATRIX,
                                             HeightMatrix & targetMatrix,
-                                            SIDE masterSide,
-                                            SIDE targetSide )
+                                            COMPARISON_SIDE masterSide,
+                                            COMPARISON_SIDE targetSide )
 {
     //first update original target line segment data
     updateOriginalProfile( targetMatrix, targetSide );
@@ -136,14 +136,14 @@ void ArrangementWidget::resizeGL( int w,
  * @param side side of the matrix
  */
 void ArrangementWidget::updateOriginalProfile( const HeightMatrix & MATRIX,
-                                             SIDE side )
+                                             COMPARISON_SIDE side )
 {
     originalProfileVertices.clear();
 
-    if ( side == SIDE::LEFT || side == SIDE::RIGHT )
+    if ( side == COMPARISON_SIDE::LEFT || side == COMPARISON_SIDE::RIGHT )
     {
         //iteration by first or last column of the matrix
-        HeightMatrix::ConstColumnIterator column = (side == SIDE::LEFT) ? MATRIX.columnBegin(0) : MATRIX.columnBegin( MATRIX.getWidth() - 1 );
+        HeightMatrix::ConstColumnIterator column = (side == COMPARISON_SIDE::LEFT) ? MATRIX.columnBegin(0) : MATRIX.columnBegin( MATRIX.getWidth() - 1 );
         originalProfileVertices.reserve( MATRIX.getHeight() * 2 );
         for ( ; column.isValid(); column++ )
         {
@@ -155,7 +155,7 @@ void ArrangementWidget::updateOriginalProfile( const HeightMatrix & MATRIX,
     else
     {
         //iteration by first or last row of the matrix
-        HeightMatrix::ConstRowIterator row = (side == SIDE::TOP) ? MATRIX.rowBegin(0) : MATRIX.rowBegin( MATRIX.getHeight() - 1 );
+        HeightMatrix::ConstRowIterator row = (side == COMPARISON_SIDE::TOP) ? MATRIX.rowBegin(0) : MATRIX.rowBegin( MATRIX.getHeight() - 1 );
         originalProfileVertices.reserve( MATRIX.getWidth() * 2 );
         for ( ; row.isValid(); row++ )
         {
@@ -175,7 +175,7 @@ void ArrangementWidget::updateOriginalProfile( const HeightMatrix & MATRIX,
  */
 void ArrangementWidget::updateArrangedProfile( const HeightMatrix & MASTER_MATRIX,
                                                const HeightMatrix & TARGET_MATRIX,
-                                               SIDE masterSide )
+                                               COMPARISON_SIDE masterSide )
 {
     arrangedProfileVertices.clear();
     float masterMatrixPrecision = (float)MASTER_MATRIX.getPrecision();
@@ -183,9 +183,9 @@ void ArrangementWidget::updateArrangedProfile( const HeightMatrix & MASTER_MATRI
     unsigned int interpolationSteps = (int)( masterMatrixPrecision / targetMatrixPrecision );
 
     //comparing LEFT side of master matrix with RIGHT side of target matrix or vice versa
-    if ( masterSide == SIDE::LEFT || masterSide == SIDE::RIGHT )
+    if ( masterSide == COMPARISON_SIDE::LEFT || masterSide == COMPARISON_SIDE::RIGHT )
     {
-        HeightMatrix::ConstColumnIterator masterColumn = (masterSide == SIDE::LEFT) ? MASTER_MATRIX.columnBegin(0) : MASTER_MATRIX.columnBegin( MASTER_MATRIX.getWidth() - 1 );
+        HeightMatrix::ConstColumnIterator masterColumn = (masterSide == COMPARISON_SIDE::LEFT) ? MASTER_MATRIX.columnBegin(0) : MASTER_MATRIX.columnBegin( MASTER_MATRIX.getWidth() - 1 );
         size_t masterHeight = MASTER_MATRIX.getHeight();
 
         //fill storage for target matrix arranged side
@@ -205,7 +205,7 @@ void ArrangementWidget::updateArrangedProfile( const HeightMatrix & MASTER_MATRI
     //comparing TOP side of master matrix with BOTTOM side of target matrix or vice versa
     else
     {
-        HeightMatrix::ConstRowIterator masterRow = (masterSide == SIDE::TOP) ? MASTER_MATRIX.rowBegin(0) : MASTER_MATRIX.rowBegin( MASTER_MATRIX.getHeight() - 1 );
+        HeightMatrix::ConstRowIterator masterRow = (masterSide == COMPARISON_SIDE::TOP) ? MASTER_MATRIX.rowBegin(0) : MASTER_MATRIX.rowBegin( MASTER_MATRIX.getHeight() - 1 );
         size_t masterWidth = MASTER_MATRIX.getWidth();
 
         //fill storage for target matrix arranged side
@@ -293,11 +293,11 @@ void ArrangementWidget::createInterpolants( float value1,
  * @param side side to update
  */
 void ArrangementWidget::updateTargetMatrix( HeightMatrix & matrix,
-                                            SIDE side )
+                                            COMPARISON_SIDE side )
 {
-    if ( side == SIDE::LEFT || side == SIDE::RIGHT )
+    if ( side == COMPARISON_SIDE::LEFT || side == COMPARISON_SIDE::RIGHT )
     {
-        HeightMatrix::ColumnIterator column = (side == SIDE::LEFT) ? matrix.columnBegin(0) : matrix.columnBegin( matrix.getWidth() - 1 );
+        HeightMatrix::ColumnIterator column = (side == COMPARISON_SIDE::LEFT) ? matrix.columnBegin(0) : matrix.columnBegin( matrix.getWidth() - 1 );
         //all odd indices for each pair in profile vector represents point height, thus +1 is applied, X coord is left old
         for ( ; column.isValid(); column++ )
         {
@@ -306,7 +306,7 @@ void ArrangementWidget::updateTargetMatrix( HeightMatrix & matrix,
     }
     else
     {
-        HeightMatrix::RowIterator row = (side == SIDE::TOP) ? matrix.rowBegin(0) : matrix.rowBegin( matrix.getHeight() - 1 );
+        HeightMatrix::RowIterator row = (side == COMPARISON_SIDE::TOP) ? matrix.rowBegin(0) : matrix.rowBegin( matrix.getHeight() - 1 );
         //all odd indices for each pair in profile vector represents point height, thus +1 is applied, X coord is left old
         for ( ; row.isValid(); row++ )
         {

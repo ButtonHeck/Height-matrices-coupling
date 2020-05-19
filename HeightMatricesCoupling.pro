@@ -30,7 +30,6 @@ SOURCES += \
         CoordinateSystem.cpp \
         Grid.cpp \
         HeightMatrix.cpp \
-        HeightMatrixIterator.cpp \
         MatrixWidget.cpp \
         TargetMatrixWidget.cpp \
         main.cpp
@@ -50,7 +49,6 @@ HEADERS += \
     CoordinateSystem.h \
     Grid.h \
     HeightMatrix.h \
-    HeightMatrixIterator.h \
     MatrixWidget.h \
     TargetMatrixWidget.h
 

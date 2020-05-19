@@ -17,18 +17,18 @@ public:
     ~ArrangementWidget();
     void updateProfilesData( const HeightMatrix & MASTER_MATRIX,
                              HeightMatrix & targetMatrix,
-                             SIDE masterSide,
-                             SIDE targetSide );
+                             COMPARISON_SIDE masterSide,
+                             COMPARISON_SIDE targetSide );
 private:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL( int w,
                    int h ) override;
     void updateOriginalProfile( const HeightMatrix & MATRIX,
-                                SIDE side );
+                                COMPARISON_SIDE side );
     void updateArrangedProfile( const HeightMatrix & MASTER_MATRIX,
                                 const HeightMatrix & TARGET_MATRIX,
-                                SIDE masterSide );
+                                COMPARISON_SIDE masterSide );
     void mergeOriginalAndArrangedVertices();
     void updateVBO();
     void adjustOriginalAndArrangedProfiles();
@@ -37,7 +37,7 @@ private:
                              unsigned int steps,
                              size_t xOffset );
     void updateTargetMatrix( HeightMatrix & matrix,
-                             SIDE side );
+                             COMPARISON_SIDE side );
 
 private:
     QOpenGLFunctions functions;

@@ -106,7 +106,7 @@ void ComparisonSidesWidget::resizeGL( int w, int h )
  * @param type type of the given matrix
  */
 void ComparisonSidesWidget::updateProfileBuffer( const HeightMatrix & MATRIX,
-                                                 SIDE side,
+                                                 COMPARISON_SIDE side,
                                                  MATRIX_TYPE type )
 {
     if ( MATRIX.getWidth() == 0 )
@@ -154,14 +154,14 @@ void ComparisonSidesWidget::updateVBO()
  * @param projectionDistance distance used in projection matrix dependent on the profile length
  */
 void ComparisonSidesWidget::createComparisonLineData( const HeightMatrix & MATRIX,
-                                                      SIDE side,
+                                                      COMPARISON_SIDE side,
                                                       std::vector<float> & vertices,
                                                       int & projectionDistance )
 {
     float precision = (float)MATRIX.getPrecision();
-    if ( side == SIDE::LEFT || side == SIDE::RIGHT )
+    if ( side == COMPARISON_SIDE::LEFT || side == COMPARISON_SIDE::RIGHT )
     {
-        HeightMatrix::ConstColumnIterator column = (side == SIDE::LEFT) ? MATRIX.columnBegin(0) : MATRIX.columnBegin( MATRIX.getWidth() - 1 );
+        HeightMatrix::ConstColumnIterator column = (side == COMPARISON_SIDE::LEFT) ? MATRIX.columnBegin(0) : MATRIX.columnBegin( MATRIX.getWidth() - 1 );
         for ( ; column.isValid(); column++ )
         {
             bufferProfileVertex( vertices, ProfileVertex{ column.getCurrentIndex() * precision, *column } );
@@ -170,7 +170,7 @@ void ComparisonSidesWidget::createComparisonLineData( const HeightMatrix & MATRI
     }
     else
     {
-        HeightMatrix::ConstRowIterator row = (side == SIDE::TOP) ? MATRIX.rowBegin(0) : MATRIX.rowBegin( MATRIX.getHeight() - 1 );
+        HeightMatrix::ConstRowIterator row = (side == COMPARISON_SIDE::TOP) ? MATRIX.rowBegin(0) : MATRIX.rowBegin( MATRIX.getHeight() - 1 );
         for ( ; row.isValid(); row++ )
         {
             bufferProfileVertex( vertices, ProfileVertex{ row.getCurrentIndex() * precision, *row } );

@@ -18,10 +18,10 @@ AppWindow::AppWindow( QWidget * parent )
     initializeMatrixSettingsWidgets( ui->comboBoxMasterMatW, ui->comboBoxMasterMatH, ui->comboBoxMasterMatPrec );
     initializeMatrixSettingsWidgets( ui->comboBoxTargetMatW, ui->comboBoxTargetMatH, ui->comboBoxTargetMatPrec );
     //setting up side selector
-    ui->comboBoxSide->addItem( "Left", (int)SIDE::LEFT );
-    ui->comboBoxSide->addItem( "Right", (int)SIDE::RIGHT );
-    ui->comboBoxSide->addItem( "Top", (int)SIDE::TOP );
-    ui->comboBoxSide->addItem( "Bottom", (int)SIDE::BOTTOM );
+    ui->comboBoxSide->addItem( "Left", (int)COMPARISON_SIDE::LEFT );
+    ui->comboBoxSide->addItem( "Right", (int)COMPARISON_SIDE::RIGHT );
+    ui->comboBoxSide->addItem( "Top", (int)COMPARISON_SIDE::TOP );
+    ui->comboBoxSide->addItem( "Bottom", (int)COMPARISON_SIDE::BOTTOM );
     ui->comboBoxSide->setCurrentIndex(1);
 
     //set arrangement condition that target matrix should not be less precised than the master matrix
@@ -58,23 +58,23 @@ void AppWindow::fillMatrix( HeightMatrix & matrix )
  * @param side master matrix' side to couple with
  * @return target corresponding side
  */
-SIDE AppWindow::getSideForTargetMatrix( SIDE side )
+COMPARISON_SIDE AppWindow::getSideForTargetMatrix( COMPARISON_SIDE side )
 {
-    if ( side == SIDE::RIGHT )
+    if ( side == COMPARISON_SIDE::RIGHT )
     {
-        side = SIDE::LEFT;
+        side = COMPARISON_SIDE::LEFT;
     }
-    else if ( side == SIDE::LEFT )
+    else if ( side == COMPARISON_SIDE::LEFT )
     {
-        side = SIDE::RIGHT;
+        side = COMPARISON_SIDE::RIGHT;
     }
-    else if ( side == SIDE::TOP )
+    else if ( side == COMPARISON_SIDE::TOP )
     {
-        side = SIDE::BOTTOM;
+        side = COMPARISON_SIDE::BOTTOM;
     }
-    else if ( side == SIDE::BOTTOM )
+    else if ( side == COMPARISON_SIDE::BOTTOM )
     {
-        side = SIDE::TOP;
+        side = COMPARISON_SIDE::TOP;
     }
     return side;
 }
@@ -89,7 +89,7 @@ void AppWindow::on_pushButtonMasterMat_clicked()
     double precision = ui->comboBoxMasterMatPrec->currentText().toDouble();
     masterMatrix = HeightMatrix( width, height, precision );
     fillMatrix(masterMatrix);
-    SIDE side = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
+    COMPARISON_SIDE side = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
 
     //update 3D representation
     updateMatrixView( ui->OGL_MasterMatWidget, masterMatrix, side );
@@ -108,7 +108,7 @@ void AppWindow::on_pushButtonTargetMat_clicked()
     double precision = ui->comboBoxTargetMatPrec->currentText().toDouble();
     targetMatrix = HeightMatrix( width, height, precision );
     fillMatrix(targetMatrix);
-    SIDE side = getSideForTargetMatrix( HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() ) );
+    COMPARISON_SIDE side = getSideForTargetMatrix( HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() ) );
 
     //update 3D representation
     updateMatrixView( ui->OGL_TargetMatWidget, targetMatrix, side );
@@ -124,11 +124,11 @@ void AppWindow::on_pushButtonTargetMat_clicked()
 void AppWindow::on_comboBoxSide_currentIndexChanged( int sideIndex )
 {
     //update 3D represenation for master matrix
-    SIDE masterSide = HeightMatrix::sideFrom(sideIndex);
+    COMPARISON_SIDE masterSide = HeightMatrix::sideFrom(sideIndex);
     updateMatrixView( ui->OGL_MasterMatWidget, masterMatrix, masterSide );
 
     //update 3D representation for target matrix
-    SIDE targetSide = getSideForTargetMatrix(masterSide);
+    COMPARISON_SIDE targetSide = getSideForTargetMatrix(masterSide);
     updateMatrixView( ui->OGL_TargetMatWidget, targetMatrix, targetSide );
 
     //update profiles view
@@ -150,8 +150,8 @@ void AppWindow::on_pushButtonArrange_clicked()
     }
 
     //update arrangement view
-    SIDE masterSide = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
-    SIDE targetSide = getSideForTargetMatrix(masterSide);
+    COMPARISON_SIDE masterSide = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
+    COMPARISON_SIDE targetSide = getSideForTargetMatrix(masterSide);
     ui->OGL_ArrangementViewWidget->makeCurrent();
     ui->OGL_ArrangementViewWidget->updateProfilesData( masterMatrix, targetMatrix, masterSide, targetSide );
     ui->OGL_ArrangementViewWidget->update();
@@ -168,7 +168,7 @@ void AppWindow::on_pushButtonArrange_clicked()
  */
 void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
                                   const HeightMatrix & MATRIX,
-                                  SIDE side )
+                                  COMPARISON_SIDE side )
 {
     matrixWidget->makeCurrent();
     matrixWidget->updateMatrixData( MATRIX, side );
@@ -182,7 +182,7 @@ void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
  * @param matrixType type of the matrix
  */
 void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
-                                   SIDE side,
+                                   COMPARISON_SIDE side,
                                    MATRIX_TYPE matrixType )
 {
     ui->OGL_ProfileViewWidget->makeCurrent();

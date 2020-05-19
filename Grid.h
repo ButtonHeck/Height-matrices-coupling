@@ -18,7 +18,7 @@ public:
           QOpenGLFunctions & functions );
     ~Grid();
     void update( const HeightMatrix & MATRIX,
-                 SIDE side );
+                 COMPARISON_SIDE side );
     int getWidth() const;
     int getHeight() const;
     void setShowFlatGrid( bool isShow );
@@ -39,7 +39,7 @@ private:
     void updateFlatGridVertices( int matrixPrecision );
     void updateMatrixGridVertices( const HeightMatrix & MATRIX );
     void updateComparisonSideVertices( const HeightMatrix & MATRIX,
-                                       SIDE side );
+                                       COMPARISON_SIDE side );
 private:
     std::vector<float> vertices;
     std::vector<GLuint> indices;
