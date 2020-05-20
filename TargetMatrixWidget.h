@@ -8,7 +8,7 @@
 class TargetMatrixWidget : public MatrixWidget
 {
 public:
-    TargetMatrixWidget( QWidget * parent = 0 );
+    explicit TargetMatrixWidget( QWidget * parent = 0 );
 
 private:
     void setClearColor() override;

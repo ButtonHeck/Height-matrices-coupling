@@ -16,7 +16,7 @@ class MatrixWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
-    MatrixWidget( QWidget * parent = 0 );
+    explicit MatrixWidget( QWidget * parent = 0 );
     void updateMatrixData( const HeightMatrix & MATRIX,
                            COMPARISON_SIDE side );
 

@@ -13,7 +13,7 @@
 class ArrangementWidget : public QOpenGLWidget
 {
 public:
-    ArrangementWidget( QWidget * parent = 0 );
+    explicit ArrangementWidget( QWidget * parent = 0 );
     ~ArrangementWidget();
     void updateProfilesData( const HeightMatrix & MASTER_MATRIX,
                              HeightMatrix & targetMatrix,

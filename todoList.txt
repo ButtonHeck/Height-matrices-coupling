@@ -6,6 +6,6 @@
 6. remake precision label text more appropriate (make 0.25, 0.5, 1.0 or 1:4 1:2 1:1 instead of current names)
 7. make use of vao
 8. flat grid redundant updates when it is not necessary to draw or could be left unchanged
-9. make explicit constructors
+9 (done). make explicit constructors
 10. check for warnings
 11. duplicate shader program creations for master and target matrices widgets
