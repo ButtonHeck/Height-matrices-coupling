@@ -16,8 +16,7 @@ public:
     ComparisonSidesWidget( QWidget * parent = 0 );
     virtual ~ComparisonSidesWidget();
     void updateProfileBuffer( const HeightMatrix & MATRIX,
-                              COMPARISON_SIDE side,
-                              MATRIX_TYPE type );
+                              COMPARISON_SIDE side );
 private:
     struct ProfileVertex
     {

@@ -7,8 +7,8 @@
 AppWindow::AppWindow( QWidget * parent )
     : QMainWindow(parent)
     , ui( new Ui::AppWindow )
-    , masterMatrix( 0, 0, 1 )
-    , targetMatrix( 0, 0, 1 )
+    , masterMatrix( 0, 0, 1, HeightMatrix::MASTER )
+    , targetMatrix( 0, 0, 1, HeightMatrix::TARGET )
 {
     //initialize ui and randomizer
     randomizer.seed( QTime::currentTime().msec() );
@@ -87,7 +87,7 @@ void AppWindow::on_pushButtonMasterMat_clicked()
     size_t width = ui->comboBoxMasterMatW->currentText().toInt();
     size_t height = ui->comboBoxMasterMatH->currentText().toInt();
     double precision = ui->comboBoxMasterMatPrec->currentText().toDouble();
-    masterMatrix = HeightMatrix( width, height, precision );
+    masterMatrix = HeightMatrix( width, height, precision, HeightMatrix::MASTER );
     fillMatrix(masterMatrix);
     COMPARISON_SIDE side = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
 
@@ -95,7 +95,7 @@ void AppWindow::on_pushButtonMasterMat_clicked()
     updateMatrixView( ui->OGL_MasterMatWidget, masterMatrix, side );
 
     //update profile view
-    updateProfileView( masterMatrix, side, MATRIX_TYPE::MASTER );
+    updateProfileView( masterMatrix, side );
 }
 
 /**
@@ -106,7 +106,7 @@ void AppWindow::on_pushButtonTargetMat_clicked()
     size_t width = ui->comboBoxTargetMatW->currentText().toInt();
     size_t height = ui->comboBoxTargetMatH->currentText().toInt();
     double precision = ui->comboBoxTargetMatPrec->currentText().toDouble();
-    targetMatrix = HeightMatrix( width, height, precision );
+    targetMatrix = HeightMatrix( width, height, precision, HeightMatrix::TARGET );
     fillMatrix(targetMatrix);
     COMPARISON_SIDE side = getSideForTargetMatrix( HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() ) );
 
@@ -114,7 +114,7 @@ void AppWindow::on_pushButtonTargetMat_clicked()
     updateMatrixView( ui->OGL_TargetMatWidget, targetMatrix, side );
 
     //update profile view
-    updateProfileView( targetMatrix, side, MATRIX_TYPE::TARGET );
+    updateProfileView( targetMatrix, side );
 }
 
 /**
@@ -133,8 +133,8 @@ void AppWindow::on_comboBoxSide_currentIndexChanged( int sideIndex )
 
     //update profiles view
     ui->OGL_ProfileViewWidget->makeCurrent();
-    ui->OGL_ProfileViewWidget->updateProfileBuffer( masterMatrix, masterSide, MATRIX_TYPE::MASTER );
-    ui->OGL_ProfileViewWidget->updateProfileBuffer( targetMatrix, targetSide, MATRIX_TYPE::TARGET );
+    ui->OGL_ProfileViewWidget->updateProfileBuffer( masterMatrix, masterSide );
+    ui->OGL_ProfileViewWidget->updateProfileBuffer( targetMatrix, targetSide );
     ui->OGL_ProfileViewWidget->update();
 }
 
@@ -179,14 +179,12 @@ void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
  * @brief updates profile view with appropriate matrix profile of a given side
  * @param matrix matrix to update profile from
  * @param side side of the matrix
- * @param matrixType type of the matrix
  */
 void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
-                                   COMPARISON_SIDE side,
-                                   MATRIX_TYPE matrixType )
+                                   COMPARISON_SIDE side )
 {
     ui->OGL_ProfileViewWidget->makeCurrent();
-    ui->OGL_ProfileViewWidget->updateProfileBuffer( MATRIX, side, matrixType );
+    ui->OGL_ProfileViewWidget->updateProfileBuffer( MATRIX, side );
     ui->OGL_ProfileViewWidget->update();
 }
 

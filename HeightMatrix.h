@@ -7,11 +7,6 @@ enum class COMPARISON_SIDE
     LEFT, RIGHT, TOP, BOTTOM
 };
 
-enum class MATRIX_TYPE
-{
-    MASTER, TARGET
-};
-
 /**
  * @brief Height matrix class represented by a 2D vector of height values.
  * matrix data is accessed via iterators
@@ -20,6 +15,12 @@ class HeightMatrix
 {
 public:
     constexpr static float MAX_HEIGHT = 2.0f;
+
+    enum MATRIX_TYPE
+    {
+        MASTER, TARGET
+    };
+
     static COMPARISON_SIDE sideFrom( int side );
 
     /**
@@ -100,7 +101,8 @@ public:
 public:
     HeightMatrix( size_t width,
                   size_t height,
-                  double precision );
+                  double precision,
+                  MATRIX_TYPE type );
     RowIterator rowBegin( const size_t ROW );
     ConstRowIterator rowBegin( const size_t ROW ) const;
     ColumnIterator columnBegin( const size_t COLUMN );
@@ -108,10 +110,12 @@ public:
     size_t getWidth() const;
     size_t getHeight() const;
     double getPrecision() const;
+    MATRIX_TYPE getType() const;
 
 private:
     std::vector< std::vector<float> > storage;
     size_t width;
     size_t height;
     double precision;
+    MATRIX_TYPE type;
 };

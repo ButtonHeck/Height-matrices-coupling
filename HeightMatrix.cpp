@@ -12,10 +12,12 @@ COMPARISON_SIDE HeightMatrix::sideFrom( int side )
 
 HeightMatrix::HeightMatrix( size_t width,
                             size_t height,
-                            double precision )
+                            double precision,
+                            MATRIX_TYPE type )
     : width(width)
     , height(height)
     , precision(precision)
+    , type(type)
 {
     //allocate data for storage
     storage.resize(height);
@@ -41,6 +43,11 @@ size_t HeightMatrix::getHeight() const
 double HeightMatrix::getPrecision() const
 {
     return precision;
+}
+
+HeightMatrix::MATRIX_TYPE HeightMatrix::getType() const
+{
+    return type;
 }
 
 HeightMatrix::RowIterator HeightMatrix::rowBegin( const size_t ROW )

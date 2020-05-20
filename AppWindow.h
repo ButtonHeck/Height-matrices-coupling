@@ -39,8 +39,7 @@ private:
                            const HeightMatrix & MATRIX,
                            COMPARISON_SIDE side );
     void updateProfileView( const HeightMatrix & MATRIX,
-                            COMPARISON_SIDE side,
-                            MATRIX_TYPE matrixType );
+                            COMPARISON_SIDE side );
 
 private:
     Ui::AppWindow * ui;

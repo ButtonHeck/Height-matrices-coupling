@@ -103,19 +103,17 @@ void ComparisonSidesWidget::resizeGL( int w, int h )
  * @brief updates profile buffer dependent on a given matrix
  * @param MATRIX matrix
  * @param side side of the given matrix
- * @param type type of the given matrix
  */
 void ComparisonSidesWidget::updateProfileBuffer( const HeightMatrix & MATRIX,
-                                                 COMPARISON_SIDE side,
-                                                 MATRIX_TYPE type )
+                                                 COMPARISON_SIDE side )
 {
     if ( MATRIX.getWidth() == 0 )
     {
         return;
     }
-    std::vector<float> & vertices = (type == MATRIX_TYPE::MASTER) ? masterProfileVertices : targetProfileVertices;
+    std::vector<float> & vertices = (MATRIX.getType() == HeightMatrix::MASTER) ? masterProfileVertices : targetProfileVertices;
     vertices.clear();
-    int & projectionHorizontalDistance = (type == MATRIX_TYPE::MASTER) ? projectionHorizontalDistanceMaster : projectionHorizontalDistanceTarget;
+    int & projectionHorizontalDistance = (MATRIX.getType() == HeightMatrix::MASTER) ? projectionHorizontalDistanceMaster : projectionHorizontalDistanceTarget;
     createComparisonLineData( MATRIX, side, vertices, projectionHorizontalDistance );
 
     //add both master and target profile lines data to one storage used by VBO during rendering
