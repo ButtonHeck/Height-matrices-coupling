@@ -1,16 +1,16 @@
-#ifndef TARGETMATRIXWIDGET_H
-#define TARGETMATRIXWIDGET_H
+#pragma once
 
 #include "MatrixWidget.h"
 
+/**
+ * @brief View widget for target matrix
+ */
 class TargetMatrixWidget : public MatrixWidget
 {
 public:
-  TargetMatrixWidget(QWidget *parent = 0);
+    TargetMatrixWidget( QWidget * parent = 0 );
 
 private:
-  void setClearColor() override;
-  QVector3D getEyePosition() override;
+    void setClearColor() override;
+    QVector3D getEyePosition() override;
 };
-
-#endif // TARGETMATRIXWIDGET_H
