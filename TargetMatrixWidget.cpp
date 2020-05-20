@@ -6,7 +6,7 @@ TargetMatrixWidget::TargetMatrixWidget( QWidget * parent )
 
 void TargetMatrixWidget::setClearColor()
 {
-    functions.glClearColor( 0.0f, 0.0f, 0.1f, 1.0f );
+    functions->glClearColor( 0.0f, 0.0f, 0.1f, 1.0f );
 }
 
 QVector3D TargetMatrixWidget::getEyePosition()

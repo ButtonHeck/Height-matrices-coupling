@@ -1,4 +1,4 @@
-1. make one global qopenglfunctions object
+1 (impossible due to different OpenGL contexts. Refactored). make one global qopenglfunctions object
 2 (done). paint grid with different shades of gray dependent on a vertex' height value
 3. make non-fixed camera view for target and master matrices
 4 (done). put matrix type parameter inside height matrix class

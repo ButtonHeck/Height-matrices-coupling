@@ -10,7 +10,7 @@
 /**
  * @brief View widget of the master and target matrices original profiles for the chosen side
  */
-class ComparisonSidesWidget : public QOpenGLWidget
+class ComparisonSidesWidget : public QOpenGLWidget, public QOpenGLFunctions
 {
 public:
     explicit ComparisonSidesWidget( QWidget * parent = 0 );
@@ -36,7 +36,6 @@ private:
                                    std::vector<float> & profilesVertices,
                                    int & projectionDistance );
 private:
-    QOpenGLFunctions functions;
     QOpenGLShaderProgram shaderProgram;
     GLuint vbo;
     bool vboDataValid;

@@ -2,7 +2,6 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLShaderProgram>
-#include <QMatrix4x4>
 #include <memory>
 
 #include "HeightMatrix.h"
@@ -30,7 +29,7 @@ protected:
     virtual void setClearColor();
     virtual QVector3D getEyePosition();
 
-    QOpenGLFunctions functions;
+    std::shared_ptr<QOpenGLFunctions> functions;
     QOpenGLShaderProgram gridShaderProgram;
     QOpenGLShaderProgram csShaderProgram;
     std::unique_ptr<Grid> grid;

@@ -2,7 +2,6 @@
 
 ComparisonSidesWidget::ComparisonSidesWidget( QWidget * parent )
     : QOpenGLWidget(parent)
-    , functions()
     , vboDataValid(false)
     , projectionHorizontalDistanceMaster(0)
     , projectionHorizontalDistanceTarget(0)
@@ -10,7 +9,7 @@ ComparisonSidesWidget::ComparisonSidesWidget( QWidget * parent )
 
 ComparisonSidesWidget::~ComparisonSidesWidget()
 {
-    functions.glDeleteBuffers( 1, &vbo );
+    glDeleteBuffers( 1, &vbo );
 }
 
 /**
@@ -19,13 +18,13 @@ ComparisonSidesWidget::~ComparisonSidesWidget()
 void ComparisonSidesWidget::initializeGL()
 {
     //initialize OpenGL functions and pre-rendering setup
-    functions.initializeOpenGLFunctions();
-    functions.glGenBuffers( 1, &vbo );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions.glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, 0 );
-    functions.glEnableVertexAttribArray(0);
-    functions.glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-    functions.glEnable(GL_PROGRAM_POINT_SIZE);
+    initializeOpenGLFunctions();
+    glGenBuffers( 1, &vbo );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+    glEnableVertexAttribArray(0);
+    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     //create shaders
     QOpenGLShader vertexShader( QOpenGLShader::Vertex );
@@ -56,7 +55,7 @@ void ComparisonSidesWidget::initializeGL()
  */
 void ComparisonSidesWidget::paintGL()
 {
-    functions.glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     if ( !shaderProgram.bind() )
     {
         qWarning( "Error during comparison widget program binding" );
@@ -78,15 +77,15 @@ void ComparisonSidesWidget::paintGL()
     //render maser matrix profile - red line
     GLsizei numMasterVertices = masterProfileVertices.size() / 2;
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 0.0f, 0.0f, 1.0f ) );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions.glDrawArrays( GL_LINE_STRIP, 0, numMasterVertices );
-    functions.glDrawArrays( GL_POINTS, 0, numMasterVertices );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glDrawArrays( GL_LINE_STRIP, 0, numMasterVertices );
+    glDrawArrays( GL_POINTS, 0, numMasterVertices );
 
     //render target matrix profile - blue line
     GLsizei numTargetVertices = targetProfileVertices.size() / 2;
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.0f, 0.0f, 1.0f, 1.0f ) );
-    functions.glDrawArrays( GL_LINE_STRIP, numMasterVertices, numTargetVertices );
-    functions.glDrawArrays( GL_POINTS, numMasterVertices, numTargetVertices );
+    glDrawArrays( GL_LINE_STRIP, numMasterVertices, numTargetVertices );
+    glDrawArrays( GL_POINTS, numMasterVertices, numTargetVertices );
 }
 
 /**
@@ -96,7 +95,7 @@ void ComparisonSidesWidget::paintGL()
  */
 void ComparisonSidesWidget::resizeGL( int w, int h )
 {
-    functions.glViewport( 0, 0, w, h );
+    glViewport( 0, 0, w, h );
 }
 
 /**
@@ -139,9 +138,9 @@ void ComparisonSidesWidget::mergeMasterAndTargetProfilesVertices()
  */
 void ComparisonSidesWidget::updateVBO()
 {
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions.glBufferData( GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glBufferData( GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
 /**

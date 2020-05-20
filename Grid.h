@@ -3,6 +3,7 @@
 #include <vector>
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_4_3_Core>
+#include <memory>
 
 #include "HeightMatrix.h"
 
@@ -15,7 +16,7 @@ class Grid
 {
 public:
     Grid( QOpenGLShaderProgram * shaderProgram,
-          QOpenGLFunctions & functions );
+          std::shared_ptr<QOpenGLFunctions> functions );
     ~Grid();
     void update( const HeightMatrix & MATRIX,
                  COMPARISON_SIDE side );
@@ -50,7 +51,7 @@ private:
     GLuint matrixGridVerticesCount;
     GLuint indicesOffset;
     GLuint comparisonSideVerticesCount;
-    QOpenGLFunctions & functions;
+    std::shared_ptr<QOpenGLFunctions> functions;
     //need this to use primitive restart with index buffers objects
     QOpenGLFunctions_4_3_Core functions_4_3;
     GLuint vbo;

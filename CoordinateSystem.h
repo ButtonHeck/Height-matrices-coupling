@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QOpenGLFunctions>
+#include <memory>
 
 class QOpenGLShaderProgram;
 
@@ -11,13 +12,13 @@ class CoordinateSystem
 {
 public:
     CoordinateSystem( QOpenGLShaderProgram * shaderProgram,
-                      QOpenGLFunctions & functions );
+                      std::shared_ptr<QOpenGLFunctions> functions );
     ~CoordinateSystem();
     void draw( const QMatrix4x4 & PROJECTION_MATRIX,
                const QMatrix4x4 & VIEW_MATRIX );
 
 private:
     QOpenGLShaderProgram * shaderProgram;
-    QOpenGLFunctions & functions;
+    std::shared_ptr<QOpenGLFunctions> functions;
     GLuint vbo;
 };

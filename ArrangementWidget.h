@@ -10,7 +10,7 @@
 /**
  * @brief View widget of the master-target arrangement for the chosen side
  */
-class ArrangementWidget : public QOpenGLWidget
+class ArrangementWidget : public QOpenGLWidget, public QOpenGLFunctions
 {
 public:
     explicit ArrangementWidget( QWidget * parent = 0 );
@@ -40,7 +40,6 @@ private:
                              COMPARISON_SIDE side );
 
 private:
-    QOpenGLFunctions functions;
     QOpenGLShaderProgram shaderProgram;
     GLuint vbo;
     bool vboDataValid;

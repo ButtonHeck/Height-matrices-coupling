@@ -2,14 +2,13 @@
 
 ArrangementWidget::ArrangementWidget( QWidget * parent )
     : QOpenGLWidget(parent)
-    , functions()
     , vboDataValid(false)
     , projectionHorizontalDistance(0)
 {}
 
 ArrangementWidget::~ArrangementWidget()
 {
-    functions.glDeleteBuffers( 1, &vbo );
+    glDeleteBuffers( 1, &vbo );
 }
 
 /**
@@ -49,13 +48,13 @@ void ArrangementWidget::updateProfilesData( const HeightMatrix & MASTER_MATRIX,
 void ArrangementWidget::initializeGL()
 {
     //initialize OpenGL function pointers and pre-rendering initialization
-    functions.initializeOpenGLFunctions();
-    functions.glGenBuffers( 1, &vbo );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions.glEnableVertexAttribArray(0);
-    functions.glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, 0 );
-    functions.glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-    functions.glEnable(GL_PROGRAM_POINT_SIZE);
+    initializeOpenGLFunctions();
+    glGenBuffers( 1, &vbo );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     //compile vertex shader
     QOpenGLShader vertexShader( QOpenGLShader::Vertex );
@@ -84,7 +83,7 @@ void ArrangementWidget::initializeGL()
  */
 void ArrangementWidget::paintGL()
 {
-    functions.glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     if ( !shaderProgram.bind() )
     {
         qWarning( "Failed to bind shader program" );
@@ -105,18 +104,18 @@ void ArrangementWidget::paintGL()
 
     //render source comparison line (before arrangement is applied) - blue line
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.0f, 0.0f, 1.0f, 1.0f ) );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
     GLsizei numOriginalVertices = originalProfileVertices.size() / 2;
-    functions.glDrawArrays( GL_LINE_STRIP, 0, numOriginalVertices );
-    functions.glDrawArrays( GL_POINTS, 0, numOriginalVertices );
+    glDrawArrays( GL_LINE_STRIP, 0, numOriginalVertices );
+    glDrawArrays( GL_POINTS, 0, numOriginalVertices );
 
     //render comparison line with arrangement applied - purple line
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 0.0f, 1.0f, 1.0f ) );
     GLsizei numArrangedVertices = arrangedProfileVertices.size() / 2;
-    functions.glDrawArrays( GL_LINE_STRIP, numOriginalVertices, numArrangedVertices );
-    functions.glDrawArrays( GL_POINTS, numOriginalVertices, numArrangedVertices );
+    glDrawArrays( GL_LINE_STRIP, numOriginalVertices, numArrangedVertices );
+    glDrawArrays( GL_POINTS, numOriginalVertices, numArrangedVertices );
 
-    functions.glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
 /**
@@ -127,7 +126,7 @@ void ArrangementWidget::paintGL()
 void ArrangementWidget::resizeGL( int w,
                                   int h )
 {
-    functions.glViewport( 0, 0, w, h );
+    glViewport( 0, 0, w, h );
 }
 
 /**
@@ -239,9 +238,9 @@ void ArrangementWidget::mergeOriginalAndArrangedVertices()
  */
 void ArrangementWidget::updateVBO()
 {
-    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions.glBufferData( GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW );
-    functions.glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glBufferData( GL_ARRAY_BUFFER, profilesVertices.size() * sizeof(float), profilesVertices.data(), GL_STATIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
 /**
