@@ -233,6 +233,7 @@ void Grid::draw( const QMatrix4x4 & PROJECTION_MATRIX,
     shaderProgram->bind();
     shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_projection"), PROJECTION_MATRIX );
     shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_view"), VIEW_MATRIX );
+    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), false );
 
     //bind buffers
     functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
@@ -241,13 +242,15 @@ void Grid::draw( const QMatrix4x4 & PROJECTION_MATRIX,
     //render flat grid if necessary
     if (flatGridVisible)
     {
-        shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 0.4f, 0.4f, 0.4f, 1.0f ) );
+        shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 0.4f, 0.2f, 0.4f, 1.0f ) );
         functions.glDrawArrays( GL_LINES, 0, flatGridVerticesCount );
     }
 
     //render height matrix grid using EBO with primitive restart mode
     shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), true );
     functions.glDrawElements( GL_LINE_STRIP, indices.size(), GL_UNSIGNED_INT, 0 );
+    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), false );
 
     //render matrix current comparison line strip
     functions.glLineWidth(2.0f);

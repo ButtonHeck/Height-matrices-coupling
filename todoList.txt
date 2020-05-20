@@ -1,5 +1,5 @@
 1. make one global qopenglfunctions object
-2. paint grid with different shades of gray dependent on a vertex' height value
+2 (done). paint grid with different shades of gray dependent on a vertex' height value
 3. make non-fixed camera view for target and master matrices
 4. put matrix type parameter inside height matrix class
 5. bug: arrange should not be applicable if already created target matrix is less precise, now it checks against checkbox only
