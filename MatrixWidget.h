@@ -29,7 +29,7 @@ protected:
     virtual void setClearColor();
     virtual QVector3D getEyePosition();
 
-    std::shared_ptr<QOpenGLFunctions> functions;
+    std::shared_ptr<QOpenGLFunctions_4_3_Core> functions;
     QOpenGLShaderProgram gridShaderProgram;
     QOpenGLShaderProgram csShaderProgram;
     std::unique_ptr<Grid> grid;

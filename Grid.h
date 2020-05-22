@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <QOpenGLFunctions>
 #include <QOpenGLFunctions_4_3_Core>
 #include <memory>
 
@@ -16,7 +15,7 @@ class Grid
 {
 public:
     Grid( QOpenGLShaderProgram * shaderProgram,
-          std::shared_ptr<QOpenGLFunctions> functions );
+          std::shared_ptr<QOpenGLFunctions_4_3_Core> functions );
     ~Grid();
     void update( const HeightMatrix & MATRIX,
                  COMPARISON_SIDE side );
@@ -51,9 +50,8 @@ private:
     GLuint matrixGridVerticesCount;
     GLuint indicesOffset;
     GLuint comparisonSideVerticesCount;
-    std::shared_ptr<QOpenGLFunctions> functions;
-    //need this to use primitive restart with index buffers objects
-    QOpenGLFunctions_4_3_Core functions_4_3;
+    std::shared_ptr<QOpenGLFunctions_4_3_Core> functions;
+    GLuint vao;
     GLuint vbo;
     GLuint ebo;
     bool flatGridVisible;

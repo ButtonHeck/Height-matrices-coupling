@@ -2,7 +2,7 @@
 
 MatrixWidget::MatrixWidget( QWidget * parent )
     : QOpenGLWidget(parent)
-    , functions(std::make_shared<QOpenGLFunctions>())
+    , functions( std::make_shared<QOpenGLFunctions_4_3_Core>() )
 {}
 
 /**
