@@ -2,7 +2,7 @@
 
 MatrixWidget::MatrixWidget( QWidget * parent )
     : QOpenGLWidget(parent)
-    , functions( std::make_shared<QOpenGLFunctions_4_3_Core>() )
+    , functions()
 {}
 
 /**
@@ -33,7 +33,7 @@ void MatrixWidget::setShowFlatGrid( bool showGrid )
 void MatrixWidget::initializeGL()
 {
     //initialize OpenGL function pointers and pre-rendering setup
-    functions->initializeOpenGLFunctions();
+    functions.initializeOpenGLFunctions();
     setClearColor();
 
     //create shaders for grid mesh
@@ -66,8 +66,8 @@ void MatrixWidget::initializeGL()
     }
 
     //initialize grid and coordinate system objects
-    grid = std::make_unique<Grid>( &gridShaderProgram, functions );
-    coordinateSystem = std::make_unique<CoordinateSystem>( &csShaderProgram, functions );
+    grid = std::make_unique<Grid>( gridShaderProgram, functions );
+    coordinateSystem = std::make_unique<CoordinateSystem>( csShaderProgram, functions );
 }
 
 /**
@@ -75,7 +75,7 @@ void MatrixWidget::initializeGL()
  */
 void MatrixWidget::paintGL()
 {
-    functions->glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    functions.glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     //update projection matrix
     QMatrix4x4 projectionMatrix;
@@ -101,7 +101,7 @@ void MatrixWidget::paintGL()
  */
 void MatrixWidget::resizeGL( int w, int h )
 {
-    functions->glViewport( 0, 0, w, h );
+    functions.glViewport( 0, 0, w, h );
 }
 
 /**
@@ -110,7 +110,7 @@ void MatrixWidget::resizeGL( int w, int h )
  */
 void MatrixWidget::setClearColor()
 {
-    functions->glClearColor( 0.1f, 0.0f, 0.0f, 1.0f );
+    functions.glClearColor( 0.1f, 0.0f, 0.0f, 1.0f );
 }
 
 /**

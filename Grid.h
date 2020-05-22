@@ -14,8 +14,8 @@ class QOpenGLShaderProgram;
 class Grid
 {
 public:
-    Grid( QOpenGLShaderProgram * shaderProgram,
-          std::shared_ptr<QOpenGLFunctions_4_3_Core> functions );
+    Grid( QOpenGLShaderProgram & shaderProgram,
+          QOpenGLFunctions_4_3_Core & functions );
     ~Grid();
     void update( const HeightMatrix & MATRIX,
                  COMPARISON_SIDE side );
@@ -43,14 +43,14 @@ private:
 private:
     std::vector<float> vertices;
     std::vector<GLuint> indices;
-    QOpenGLShaderProgram * shaderProgram;
+    QOpenGLShaderProgram & shaderProgram;
     int width;
     int height;
     GLuint flatGridVerticesCount;
     GLuint matrixGridVerticesCount;
     GLuint indicesOffset;
     GLuint comparisonSideVerticesCount;
-    std::shared_ptr<QOpenGLFunctions_4_3_Core> functions;
+    QOpenGLFunctions_4_3_Core & functions;
     GLuint vao;
     GLuint vbo;
     GLuint ebo;

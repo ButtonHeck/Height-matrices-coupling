@@ -2,8 +2,8 @@
 
 #include <QOpenGLShaderProgram>
 
-Grid::Grid( QOpenGLShaderProgram * shaderProgram,
-            std::shared_ptr<QOpenGLFunctions_4_3_Core> functions )
+Grid::Grid( QOpenGLShaderProgram & shaderProgram,
+            QOpenGLFunctions_4_3_Core & functions )
     : shaderProgram(shaderProgram)
     , width(0)
     , height(0)
@@ -14,25 +14,25 @@ Grid::Grid( QOpenGLShaderProgram * shaderProgram,
     , functions(functions)
     , flatGridVisible(false)
 {
-    functions->glGenVertexArrays( 1, &vao );
-    functions->glGenBuffers( 1, &vbo );
-    functions->glGenBuffers( 1, &ebo );
-    functions->glBindVertexArray(vao);
-    functions->glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions->glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, 0 );
-    functions->glEnableVertexAttribArray(0);
+    functions.glGenVertexArrays( 1, &vao );
+    functions.glGenBuffers( 1, &vbo );
+    functions.glGenBuffers( 1, &ebo );
+    functions.glBindVertexArray(vao);
+    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    functions.glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, 0 );
+    functions.glEnableVertexAttribArray(0);
 
     //GL_PRIMITIVE_RESTART is used for height matrix grid rendering
-    functions->glEnable(GL_PRIMITIVE_RESTART);
-    functions->glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);
-    functions->glBindVertexArray(0);
+    functions.glEnable(GL_PRIMITIVE_RESTART);
+    functions.glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);
+    functions.glBindVertexArray(0);
 }
 
 Grid::~Grid()
 {
-    functions->glDeleteBuffers( 1, &vbo );
-    functions->glDeleteBuffers( 1, &ebo );
-    functions->glDeleteVertexArrays( 1, &vao );
+    functions.glDeleteBuffers( 1, &vbo );
+    functions.glDeleteBuffers( 1, &ebo );
+    functions.glDeleteVertexArrays( 1, &vao );
 }
 
 /**
@@ -66,12 +66,12 @@ void Grid::update( const HeightMatrix & MATRIX,
     comparisonSideVerticesCount = 0;
     updateComparisonSideVertices( MATRIX, side );
 
-    functions->glBindVertexArray(vao);
-    functions->glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    functions->glBufferData( GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW );
+    functions.glBindVertexArray(vao);
+    functions.glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    functions.glBufferData( GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW );
 
-    functions->glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
-    functions->glBufferData( GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW );
+    functions.glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
+    functions.glBufferData( GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW );
 }
 
 /**
@@ -231,31 +231,31 @@ void Grid::draw( const QMatrix4x4 & PROJECTION_MATRIX,
                  const QMatrix4x4 & VIEW_MATRIX )
 {
     //update transformation matrices
-    shaderProgram->bind();
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_projection"), PROJECTION_MATRIX );
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_view"), VIEW_MATRIX );
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), false );
+    shaderProgram.bind();
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_projection"), PROJECTION_MATRIX );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_view"), VIEW_MATRIX );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_applyHeightColoring"), false );
 
-    functions->glBindVertexArray(vao);
+    functions.glBindVertexArray(vao);
 
     //render flat grid if necessary
     if (flatGridVisible)
     {
-        shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 0.4f, 0.2f, 0.4f, 1.0f ) );
-        functions->glDrawArrays( GL_LINES, 0, flatGridVerticesCount );
+        shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.4f, 0.2f, 0.4f, 1.0f ) );
+        functions.glDrawArrays( GL_LINES, 0, flatGridVerticesCount );
     }
 
     //render height matrix grid using EBO with primitive restart mode
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), true );
-    functions->glDrawElements( GL_LINE_STRIP, indices.size(), GL_UNSIGNED_INT, 0 );
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_applyHeightColoring"), false );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_applyHeightColoring"), true );
+    functions.glDrawElements( GL_LINE_STRIP, indices.size(), GL_UNSIGNED_INT, 0 );
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_applyHeightColoring"), false );
 
     //render matrix current comparison line strip
-    functions->glLineWidth(2.0f);
-    shaderProgram->setUniformValue( shaderProgram->uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 0.0f, 1.0f ) );
-    functions->glDrawArrays( GL_LINE_STRIP, flatGridVerticesCount + matrixGridVerticesCount, comparisonSideVerticesCount );
-    functions->glLineWidth(1.0f);
+    functions.glLineWidth(2.0f);
+    shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    functions.glDrawArrays( GL_LINE_STRIP, flatGridVerticesCount + matrixGridVerticesCount, comparisonSideVerticesCount );
+    functions.glLineWidth(1.0f);
 }
 
 
