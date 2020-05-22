@@ -86,7 +86,7 @@ void AppWindow::on_pushButtonMasterMat_clicked()
 {
     size_t width = ui->comboBoxMasterMatW->currentText().toInt();
     size_t height = ui->comboBoxMasterMatH->currentText().toInt();
-    double precision = ui->comboBoxMasterMatPrec->currentText().toDouble();
+    double precision = ui->comboBoxMasterMatPrec->itemData( ui->comboBoxMasterMatPrec->currentIndex() ).toDouble();
     masterMatrix = HeightMatrix( width, height, precision, HeightMatrix::MASTER );
     fillMatrix(masterMatrix);
     COMPARISON_SIDE side = HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() );
@@ -105,7 +105,7 @@ void AppWindow::on_pushButtonTargetMat_clicked()
 {
     size_t width = ui->comboBoxTargetMatW->currentText().toInt();
     size_t height = ui->comboBoxTargetMatH->currentText().toInt();
-    double precision = ui->comboBoxTargetMatPrec->currentText().toDouble();
+    double precision = ui->comboBoxTargetMatPrec->itemData( ui->comboBoxTargetMatPrec->currentIndex() ).toDouble();
     targetMatrix = HeightMatrix( width, height, precision, HeightMatrix::TARGET );
     fillMatrix(targetMatrix);
     COMPARISON_SIDE side = getSideForTargetMatrix( HeightMatrix::sideFrom( ui->comboBoxSide->currentIndex() ) );
@@ -193,8 +193,8 @@ void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
  */
 void AppWindow::arrangeButtonCheckEnabled()
 {
-    double masterMatrixPrecision = ui->comboBoxMasterMatPrec->currentText().toDouble();
-    double targetMatrixPrecision = ui->comboBoxTargetMatPrec->currentText().toDouble();
+    double masterMatrixPrecision = ui->comboBoxMasterMatPrec->itemData( ui->comboBoxMasterMatPrec->currentIndex() ).toDouble();
+    double targetMatrixPrecision = ui->comboBoxTargetMatPrec->itemData( ui->comboBoxTargetMatPrec->currentIndex() ).toDouble();
     ui->pushButtonArrange->setEnabled( masterMatrixPrecision >= targetMatrixPrecision );
 }
 
@@ -216,8 +216,8 @@ void AppWindow::initializeMatrixSettingsWidgets( QComboBox * widthComboBox,
     heightComboBox->addItem("20");
     heightComboBox->addItem("30");
     heightComboBox->setCurrentIndex(1);
-    precisionComboBox->addItem("1");
-    precisionComboBox->addItem("2");
-    precisionComboBox->addItem("4");
+    precisionComboBox->addItem("1:1", 1);
+    precisionComboBox->addItem("1:2", 2);
+    precisionComboBox->addItem("1:4", 4);
     precisionComboBox->setCurrentIndex(1);
 }
