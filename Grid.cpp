@@ -9,7 +9,7 @@ Grid::Grid( QOpenGLShaderProgram & shaderProgram,
     , height(0)
     , flatGridVerticesCount(0)
     , matrixGridVerticesCount(0)
-    , indicesOffset(0)
+    , indicesOffsetFromFlatGrid(0)
     , comparisonSideVerticesCount(0)
     , functions(functions)
     , flatGridVisible(false)
@@ -47,18 +47,30 @@ void Grid::update( const HeightMatrix & MATRIX,
     {
         return;
     }
+    int oldWidth = width;
+    int oldHeight = height;
+
     //update dimensions
     const double MATRIX_PRECISION = MATRIX.getPrecision();
     width = MATRIX.getWidth() * MATRIX_PRECISION;
     height = MATRIX.getHeight() * MATRIX_PRECISION;
-
-    //make sure to renew storages
-    vertices.clear();
     indices.clear();
-    indicesOffset = 0;
 
-    flatGridVerticesCount = 0;
-    updateFlatGridVertices( MATRIX_PRECISION );
+    //update both flat grid and matrix mesh with comparison line
+    if ( oldWidth != width || oldHeight != height )
+    {
+        vertices.clear();
+        indices.clear();
+        indicesOffsetFromFlatGrid = 0;
+        flatGridVerticesCount = 0;
+        updateFlatGridVertices( MATRIX_PRECISION );
+    }
+    //update only matrix mesh and comparison line
+    else
+    {
+        vertices.resize( flatGridVerticesCount * 3 );
+        indicesOffsetFromFlatGrid = flatGridVerticesCount;
+    }
 
     matrixGridVerticesCount = 0;
     updateMatrixGridVertices(MATRIX);
@@ -95,12 +107,12 @@ void Grid::updateFlatGridVertices( int matrixPrecision )
         // (-X;z) vertex
         FlatGridVertex negX{ (float)(-halfWidth), (float)z };
         bufferFlatGridVertex( std::move(negX) );
-        indicesOffset++;
+        indicesOffsetFromFlatGrid++;
 
         // (X;z) vertex
         FlatGridVertex posX{ (float)(halfWidth - matrixPrecision), (float)z };
         bufferFlatGridVertex( std::move(posX) );
-        indicesOffset++;
+        indicesOffsetFromFlatGrid++;
     }
 
     //create lines parallel to Z axis (count is equal to width of the grid plus one extra at x = 0.0)
@@ -109,12 +121,12 @@ void Grid::updateFlatGridVertices( int matrixPrecision )
         // (x;-Z) vertex
         FlatGridVertex negZ{ (float)x, (float)(-halfHeight) };
         bufferFlatGridVertex( std::move(negZ) );
-        indicesOffset++;
+        indicesOffsetFromFlatGrid++;
 
         // (x;Z) vertex
         FlatGridVertex posZ{ (float)x, (float)(halfHeight - matrixPrecision) };
         bufferFlatGridVertex( std::move(posZ) );
-        indicesOffset++;
+        indicesOffsetFromFlatGrid++;
     }
 }
 
@@ -143,7 +155,7 @@ void Grid::updateMatrixGridVertices( const HeightMatrix & MATRIX )
                                 *row,
                                 column.getCurrentIndex() * precision - halfHeight };
             bufferMatrixGridVertex( std::move(v) );
-            indices.emplace_back( indicesOffset++ );
+            indices.emplace_back( indicesOffsetFromFlatGrid++ );
         }
         indices.emplace_back(PRIMITIVE_RESTART_INDEX);
     }
@@ -157,7 +169,7 @@ void Grid::updateMatrixGridVertices( const HeightMatrix & MATRIX )
                                 *column,
                                 column.getCurrentIndex() * precision - halfHeight };
             bufferMatrixGridVertex( std::move(v) );
-            indices.emplace_back( indicesOffset++ );
+            indices.emplace_back( indicesOffsetFromFlatGrid++ );
         }
         indices.emplace_back(PRIMITIVE_RESTART_INDEX);
     }

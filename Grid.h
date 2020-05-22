@@ -48,7 +48,7 @@ private:
     int height;
     GLuint flatGridVerticesCount;
     GLuint matrixGridVerticesCount;
-    GLuint indicesOffset;
+    GLuint indicesOffsetFromFlatGrid;
     GLuint comparisonSideVerticesCount;
     QOpenGLFunctions_4_3_Core & functions;
     GLuint vao;
