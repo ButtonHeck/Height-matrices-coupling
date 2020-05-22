@@ -197,6 +197,14 @@ void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
 void AppWindow::arrangeButtonCheckEnabled()
 {
     ui->pushButtonArrange->setEnabled( masterMatrix.getPrecision() >= targetMatrix.getPrecision() );
+    if ( ui->pushButtonArrange->isEnabled() )
+    {
+        ui->pushButtonArrange->setToolTip("");
+    }
+    else
+    {
+        ui->pushButtonArrange->setToolTip("Target matrix should be no less precise than master");
+    }
 }
 
 /**
