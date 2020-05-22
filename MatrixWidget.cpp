@@ -12,11 +12,13 @@ MatrixWidget::MatrixWidget( QWidget * parent )
  * @brief delegates update call to the widget's underlying grid object
  * @param MATRIX matrix
  * @param side side of the matrix
+ * @param comparisonOnly flag indicating that only comparison line data should be updated
  */
 void MatrixWidget::updateMatrixData( const HeightMatrix & MATRIX,
-                                     COMPARISON_SIDE side )
+                                     COMPARISON_SIDE side,
+                                     bool comparisonOnly )
 {
-    grid->update( MATRIX, side );
+    grid->update( MATRIX, side, comparisonOnly );
 }
 
 /**

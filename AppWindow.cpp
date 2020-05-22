@@ -128,11 +128,11 @@ void AppWindow::on_comboBoxSide_currentIndexChanged( int sideIndex )
 {
     //update 3D represenation for master matrix
     COMPARISON_SIDE masterSide = HeightMatrix::sideFrom(sideIndex);
-    updateMatrixView( ui->OGL_MasterMatWidget, masterMatrix, masterSide );
+    updateMatrixView( ui->OGL_MasterMatWidget, masterMatrix, masterSide, true );
 
     //update 3D representation for target matrix
     COMPARISON_SIDE targetSide = getSideForTargetMatrix(masterSide);
-    updateMatrixView( ui->OGL_TargetMatWidget, targetMatrix, targetSide );
+    updateMatrixView( ui->OGL_TargetMatWidget, targetMatrix, targetSide, true );
 
     //update profiles view
     ui->OGL_ProfileViewWidget->makeCurrent();
@@ -168,13 +168,15 @@ void AppWindow::on_pushButtonArrange_clicked()
  * @param matrixWidget widget to update
  * @param matrix matrix containing heights data
  * @param side side to arrange
+ * @param comparisonOnly flag indicating that only comparison line data should be updated
  */
 void AppWindow::updateMatrixView( MatrixWidget * matrixWidget,
                                   const HeightMatrix & MATRIX,
-                                  COMPARISON_SIDE side )
+                                  COMPARISON_SIDE side,
+                                  bool comparisonOnly )
 {
     matrixWidget->makeCurrent();
-    matrixWidget->updateMatrixData( MATRIX, side );
+    matrixWidget->updateMatrixData( MATRIX, side, comparisonOnly );
     matrixWidget->update();
 }
 

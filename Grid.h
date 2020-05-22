@@ -18,7 +18,8 @@ public:
           QOpenGLFunctions_4_3_Core & functions );
     ~Grid();
     void update( const HeightMatrix & MATRIX,
-                 COMPARISON_SIDE side );
+                 COMPARISON_SIDE side,
+                 bool comparisonOnly = false );
     int getWidth() const;
     int getHeight() const;
     void setShowFlatGrid( bool isShow );

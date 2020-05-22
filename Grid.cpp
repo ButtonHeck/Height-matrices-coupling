@@ -39,41 +39,51 @@ Grid::~Grid()
  * @brief updates grids data and related buffers
  * @param MATRIX matrix
  * @param side side of the matrix
+ * @param comparisonOnly flag indicating that only comparison line data should be updated
  */
 void Grid::update( const HeightMatrix & MATRIX,
-                   COMPARISON_SIDE side )
+                   COMPARISON_SIDE side,
+                   bool comparisonOnly )
 {
     if ( MATRIX.getWidth() == 0 )
     {
         return;
     }
-    int oldWidth = width;
-    int oldHeight = height;
-
-    //update dimensions
-    const double MATRIX_PRECISION = MATRIX.getPrecision();
-    width = MATRIX.getWidth() * MATRIX_PRECISION;
-    height = MATRIX.getHeight() * MATRIX_PRECISION;
-    indices.clear();
-
-    //update both flat grid and matrix mesh with comparison line
-    if ( oldWidth != width || oldHeight != height )
+    if ( !comparisonOnly )
     {
-        vertices.clear();
+        int oldWidth = width;
+        int oldHeight = height;
+
+        //update dimensions
+        const double MATRIX_PRECISION = MATRIX.getPrecision();
+        width = MATRIX.getWidth() * MATRIX_PRECISION;
+        height = MATRIX.getHeight() * MATRIX_PRECISION;
         indices.clear();
-        indicesOffsetFromFlatGrid = 0;
-        flatGridVerticesCount = 0;
-        updateFlatGridVertices( MATRIX_PRECISION );
+
+        //update both flat grid and matrix mesh with comparison line
+        if ( oldWidth != width || oldHeight != height )
+        {
+            vertices.clear();
+            indices.clear();
+            indicesOffsetFromFlatGrid = 0;
+            flatGridVerticesCount = 0;
+            updateFlatGridVertices( MATRIX_PRECISION );
+        }
+        //update only matrix mesh and comparison line
+        else
+        {
+            vertices.resize( flatGridVerticesCount * 3 );
+            indicesOffsetFromFlatGrid = flatGridVerticesCount;
+        }
+
+        matrixGridVerticesCount = 0;
+        updateMatrixGridVertices(MATRIX);
     }
-    //update only matrix mesh and comparison line
+    //update only comparison line
     else
     {
-        vertices.resize( flatGridVerticesCount * 3 );
-        indicesOffsetFromFlatGrid = flatGridVerticesCount;
+        vertices.resize( flatGridVerticesCount * 3 + matrixGridVerticesCount * 3 );
     }
-
-    matrixGridVerticesCount = 0;
-    updateMatrixGridVertices(MATRIX);
 
     comparisonSideVerticesCount = 0;
     updateComparisonSideVertices( MATRIX, side );

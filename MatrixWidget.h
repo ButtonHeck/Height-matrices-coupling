@@ -17,7 +17,8 @@ class MatrixWidget : public QOpenGLWidget
 public:
     explicit MatrixWidget( QWidget * parent = 0 );
     void updateMatrixData( const HeightMatrix & MATRIX,
-                           COMPARISON_SIDE side );
+                           COMPARISON_SIDE side,
+                           bool comparisonOnly = false );
 
 public slots:
     void setShowFlatGrid( bool showGrid );

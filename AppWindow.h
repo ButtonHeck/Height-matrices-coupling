@@ -37,7 +37,8 @@ private:
     COMPARISON_SIDE getSideForTargetMatrix( COMPARISON_SIDE side );
     void updateMatrixView( MatrixWidget * matrixWidget,
                            const HeightMatrix & MATRIX,
-                           COMPARISON_SIDE side );
+                           COMPARISON_SIDE side,
+                           bool comparisonOnly = false );
     void updateProfileView( const HeightMatrix & MATRIX,
                             COMPARISON_SIDE side );
 
