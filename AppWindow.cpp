@@ -24,9 +24,6 @@ AppWindow::AppWindow( QWidget * parent )
     ui->comboBoxSide->addItem( "Bottom", (int)COMPARISON_SIDE::BOTTOM );
     ui->comboBoxSide->setCurrentIndex(1);
 
-    //set arrangement condition that target matrix should not be less precised than the master matrix
-    connect( ui->comboBoxMasterMatPrec, SIGNAL( currentIndexChanged(int) ), SLOT( arrangeButtonCheckEnabled() ) );
-    connect( ui->comboBoxTargetMatPrec, SIGNAL( currentIndexChanged(int) ), SLOT( arrangeButtonCheckEnabled() ) );
     //grid visibility
     connect( ui->checkBoxMasterShowGrid, SIGNAL( toggled(bool) ), ui->OGL_MasterMatWidget, SLOT( setShowFlatGrid(bool) ) );
     connect( ui->checkBoxTargetShowGrid, SIGNAL( toggled(bool) ), ui->OGL_TargetMatWidget, SLOT( setShowFlatGrid(bool) ) );
@@ -96,6 +93,9 @@ void AppWindow::on_pushButtonMasterMat_clicked()
 
     //update profile view
     updateProfileView( masterMatrix, side );
+
+    //check if the target matrix could bo arranged with new master
+    arrangeButtonCheckEnabled();
 }
 
 /**
@@ -115,6 +115,9 @@ void AppWindow::on_pushButtonTargetMat_clicked()
 
     //update profile view
     updateProfileView( targetMatrix, side );
+
+    //check if the new matrix could be arranged with master
+    arrangeButtonCheckEnabled();
 }
 
 /**
@@ -193,9 +196,7 @@ void AppWindow::updateProfileView( const HeightMatrix & MATRIX,
  */
 void AppWindow::arrangeButtonCheckEnabled()
 {
-    double masterMatrixPrecision = ui->comboBoxMasterMatPrec->itemData( ui->comboBoxMasterMatPrec->currentIndex() ).toDouble();
-    double targetMatrixPrecision = ui->comboBoxTargetMatPrec->itemData( ui->comboBoxTargetMatPrec->currentIndex() ).toDouble();
-    ui->pushButtonArrange->setEnabled( masterMatrixPrecision >= targetMatrixPrecision );
+    ui->pushButtonArrange->setEnabled( masterMatrix.getPrecision() >= targetMatrix.getPrecision() );
 }
 
 /**
