@@ -12,5 +12,4 @@ public:
 
 private:
     void setClearColor() override;
-    QVector3D getEyePosition() override;
 };

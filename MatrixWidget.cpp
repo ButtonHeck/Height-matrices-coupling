@@ -1,8 +1,11 @@
 #include "MatrixWidget.h"
+#include <QMouseEvent>
+#include <QMatrix4x4>
 
 MatrixWidget::MatrixWidget( QWidget * parent )
     : QOpenGLWidget(parent)
     , functions()
+    , eyePosition( 20, 20, 20 )
 {}
 
 /**
@@ -25,6 +28,64 @@ void MatrixWidget::setShowFlatGrid( bool showGrid )
     makeCurrent();
     grid->setShowFlatGrid(showGrid);
     update();
+}
+
+void MatrixWidget::mouseMoveEvent( QMouseEvent * event )
+{
+    constexpr QVector3D Y_AXIS_VECTOR( 0.0, 1.0, 0.0 );
+    constexpr float ZOOM_IN_RATIO = 1.05f;
+    constexpr float ZOOM_OUT_RATIO = 1 / ZOOM_IN_RATIO;
+
+    if ( event->buttons() & Qt::LeftButton )
+    {
+        QMatrix4x4 rotMatrixXZ;
+        rotMatrixXZ.rotate( lastMousePosition.x() - event->x(), Y_AXIS_VECTOR );
+
+        QMatrix4x4 rotMatrixForViewAxis;
+        rotMatrixForViewAxis.rotate( 90, Y_AXIS_VECTOR );
+        QVector3D viewVerticalAxis = rotMatrixForViewAxis.map(eyePosition);
+        viewVerticalAxis.setY( 0.0f );
+        viewVerticalAxis.normalize();
+
+        QMatrix4x4 rotMatrixVertical;
+        rotMatrixVertical.rotate( ( lastMousePosition.y() - event->y() ) * 0.5, viewVerticalAxis );
+
+        QMatrix4x4 rotationMatrix = rotMatrixXZ * rotMatrixVertical;
+        eyePosition = rotationMatrix.map(eyePosition);
+        lastMousePosition = event->localPos();
+        update();
+    }
+    else if ( event->buttons() & Qt::RightButton )
+    {
+        if ( event->y() > lastMousePosition.y() )
+        {
+            eyePosition *= ZOOM_IN_RATIO;
+        }
+        else if ( event->y() < lastMousePosition.y() )
+        {
+            eyePosition *= ZOOM_OUT_RATIO;
+        }
+        lastMousePosition = event->localPos();
+        update();
+    }
+}
+
+void MatrixWidget::mousePressEvent( QMouseEvent * event )
+{
+    if ( ( event->buttons() & Qt::LeftButton ) && !mousePosSaved )
+    {
+        lastMousePosition = event->localPos();
+        mousePosSaved = true;
+    }
+}
+
+void MatrixWidget::mouseReleaseEvent( QMouseEvent * event )
+{
+    Q_UNUSED(event);
+    if ( mousePosSaved )
+    {
+        mousePosSaved = false;
+    }
 }
 
 /**
@@ -85,7 +146,7 @@ void MatrixWidget::paintGL()
 
     //update view matrix
     QMatrix4x4 viewMatrix;
-    viewMatrix.lookAt( getEyePosition(), QVector3D( 0.0f, 0.0f, 0.0f ), QVector3D( 0.0f, 1.0f, 0.0f ) );
+    viewMatrix.lookAt( eyePosition, QVector3D( 0.0f, 0.0f, 0.0f ), QVector3D( 0.0f, 1.0f, 0.0f ) );
 
     //grid rendering
     grid->draw( projectionMatrix, viewMatrix );
@@ -111,13 +172,4 @@ void MatrixWidget::resizeGL( int w, int h )
 void MatrixWidget::setClearColor()
 {
     functions.glClearColor( 0.1f, 0.0f, 0.0f, 1.0f );
-}
-
-/**
- * @brief calculates default eye position for the view matrix based on the underlying grid dimensions
- * @return QVector3D object that represents position of the viewer
- */
-QVector3D MatrixWidget::getEyePosition()
-{
-    return QVector3D( grid->getWidth(), std::min( grid->getWidth(), grid->getHeight() ), grid->getHeight() );
 }

@@ -1,6 +1,6 @@
 1 (impossible due to different OpenGL contexts. Refactored). make one global qopenglfunctions object
 2 (done). paint grid with different shades of gray dependent on a vertex' height value
-3. make non-fixed camera view for target and master matrices
+3 (done). make non-fixed camera view for target and master matrices
 4 (done). put matrix type parameter inside height matrix class
 5 (done). bug: arrange should not be applicable if already created target matrix is less precise, now it checks against checkbox only
 6 (done). remake precision label text more appropriate (make 0.25, 0.5, 1.0 or 1:4 1:2 1:1 instead of current names)
