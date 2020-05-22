@@ -8,4 +8,4 @@
 8. flat grid redundant updates when it is not necessary to draw or could be left unchanged
 9 (done). make explicit constructors
 10. check for warnings
-11. duplicate shader program creations for master and target matrices widgets
+11 (closed. Different contexts == different shader prgorams). duplicate shader program creations for master and target matrices widgets
