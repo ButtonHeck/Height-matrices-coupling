@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1137</width>
-    <height>732</height>
+    <height>756</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,10 +29,15 @@
             <item>
              <widget class="QLabel" name="labelMasterMat">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
               </property>
               <property name="text">
                <string>Master matrix</string>
@@ -40,26 +45,26 @@
              </widget>
             </item>
             <item>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <layout class="QVBoxLayout" name="verticalLayout">
               <property name="spacing">
                <number>0</number>
               </property>
-              <item>
-               <spacer name="verticalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Minimum</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>10</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
               <item>
                <widget class="QLabel" name="labelMasterMatW">
                 <property name="sizePolicy">
@@ -178,6 +183,20 @@
              </widget>
             </item>
             <item>
+             <widget class="QLabel" name="CameraHintLabel1">
+              <property name="text">
+               <string>LMB: rotate view</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="CameraHintLabel2">
+              <property name="text">
+               <string>RMB: zoom in/out</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -243,6 +262,11 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
               </property>
               <property name="text">
                <string>Target matrix</string>
