@@ -5,7 +5,7 @@
 5 (done). bug: arrange should not be applicable if already created target matrix is less precise, now it checks against checkbox only
 6 (done). remake precision label text more appropriate (make 0.25, 0.5, 1.0 or 1:4 1:2 1:1 instead of current names)
 7 (done). make use of vao
-8. flat grid redundant updates when it is not necessary to draw or could be left unchanged
+8 (done). flat grid redundant updates when it is not necessary to draw or could be left unchanged
 9 (done). make explicit constructors
-10. check for warnings
+10 (done). check for warnings
 11 (closed. Different contexts == different shader prgorams). duplicate shader program creations for master and target matrices widgets

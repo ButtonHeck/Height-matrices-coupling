@@ -75,14 +75,14 @@ void ComparisonSidesWidget::paintGL()
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_projection"), projectionMatrix );
 
     //render maser matrix profile - red line
-    GLsizei numMasterVertices = masterProfileVertices.size() / 2;
+    GLsizei numMasterVertices = (GLsizei)masterProfileVertices.size() / 2;
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 0.0f, 0.0f, 1.0f ) );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
     glDrawArrays( GL_LINE_STRIP, 0, numMasterVertices );
     glDrawArrays( GL_POINTS, 0, numMasterVertices );
 
     //render target matrix profile - blue line
-    GLsizei numTargetVertices = targetProfileVertices.size() / 2;
+    GLsizei numTargetVertices = (GLsizei)targetProfileVertices.size() / 2;
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.0f, 0.0f, 1.0f, 1.0f ) );
     glDrawArrays( GL_LINE_STRIP, numMasterVertices, numTargetVertices );
     glDrawArrays( GL_POINTS, numMasterVertices, numTargetVertices );

@@ -46,5 +46,5 @@ private:
     std::vector<float> profilesVertices;
     std::vector<float> originalProfileVertices;
     std::vector<float> arrangedProfileVertices;
-    int projectionHorizontalDistance;
+    size_t projectionHorizontalDistance;
 };

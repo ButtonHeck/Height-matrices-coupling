@@ -270,7 +270,7 @@ void Grid::draw( const QMatrix4x4 & PROJECTION_MATRIX,
     //render height matrix grid using EBO with primitive restart mode
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 1.0f, 1.0f, 1.0f ) );
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_applyHeightColoring"), true );
-    functions.glDrawElements( GL_LINE_STRIP, indices.size(), GL_UNSIGNED_INT, 0 );
+    functions.glDrawElements( GL_LINE_STRIP, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0 );
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_applyHeightColoring"), false );
 
     //render matrix current comparison line strip

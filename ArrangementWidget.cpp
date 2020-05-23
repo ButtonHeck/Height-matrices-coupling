@@ -105,13 +105,13 @@ void ArrangementWidget::paintGL()
     //render source comparison line (before arrangement is applied) - blue line
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 0.0f, 0.0f, 1.0f, 1.0f ) );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    GLsizei numOriginalVertices = originalProfileVertices.size() / 2;
+    GLsizei numOriginalVertices = (GLsizei)originalProfileVertices.size() / 2;
     glDrawArrays( GL_LINE_STRIP, 0, numOriginalVertices );
     glDrawArrays( GL_POINTS, 0, numOriginalVertices );
 
     //render comparison line with arrangement applied - purple line
     shaderProgram.setUniformValue( shaderProgram.uniformLocation("u_color"), QVector4D( 1.0f, 0.0f, 1.0f, 1.0f ) );
-    GLsizei numArrangedVertices = arrangedProfileVertices.size() / 2;
+    GLsizei numArrangedVertices = (GLsizei)arrangedProfileVertices.size() / 2;
     glDrawArrays( GL_LINE_STRIP, numOriginalVertices, numArrangedVertices );
     glDrawArrays( GL_POINTS, numOriginalVertices, numArrangedVertices );
 
