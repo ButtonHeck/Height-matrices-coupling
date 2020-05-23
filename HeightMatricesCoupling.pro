@@ -56,4 +56,6 @@ RESOURCES += \
     Shaders.qrc
 
 DISTFILES += \
+    README.md \
+    app.png \
     todoList.txt
