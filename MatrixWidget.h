@@ -24,7 +24,6 @@ public slots:
     void setShowFlatGrid( bool showGrid );
     void mouseMoveEvent( QMouseEvent * event ) override;
     void mousePressEvent( QMouseEvent * event ) override;
-    void mouseReleaseEvent( QMouseEvent * event ) override;
 
 protected:
     void initializeGL() override;
@@ -39,5 +38,4 @@ protected:
     std::unique_ptr<CoordinateSystem> coordinateSystem;
     QVector3D eyePosition;
     QPointF lastMousePosition;
-    bool mousePosSaved;
 };

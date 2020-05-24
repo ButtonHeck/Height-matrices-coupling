@@ -74,19 +74,9 @@ void MatrixWidget::mouseMoveEvent( QMouseEvent * event )
 
 void MatrixWidget::mousePressEvent( QMouseEvent * event )
 {
-    if ( ( event->buttons() & Qt::LeftButton ) && !mousePosSaved )
+    if ( event->buttons() & Qt::LeftButton )
     {
         lastMousePosition = event->localPos();
-        mousePosSaved = true;
-    }
-}
-
-void MatrixWidget::mouseReleaseEvent( QMouseEvent * event )
-{
-    Q_UNUSED(event);
-    if ( mousePosSaved )
-    {
-        mousePosSaved = false;
     }
 }
 
