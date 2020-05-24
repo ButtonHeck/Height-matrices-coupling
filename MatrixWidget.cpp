@@ -87,6 +87,7 @@ void MatrixWidget::initializeGL()
 {
     //initialize OpenGL function pointers and pre-rendering setup
     functions.initializeOpenGLFunctions();
+    functions.glEnable(GL_DEPTH_TEST);
     setClearColor();
 
     //create shaders for grid mesh

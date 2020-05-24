@@ -10,7 +10,8 @@ out vec3 v_gDirection;
 
 void main()
 {
-    gl_Position = u_projection * u_view * vec4(0.0, 0.0, 0.0, 1.0);
+    //a little offset from Y=0 applied to prevent z-fighting with flat grid
+    gl_Position = u_projection * u_view * vec4(0.0, 0.01, 0.0, 1.0);
     v_gColor = vec4(i_color, 1.0);
 
     //make direction line 40 units length
